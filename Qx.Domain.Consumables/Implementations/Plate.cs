@@ -9,15 +9,17 @@ namespace Qx.Domain.Consumables.Implementations;
 public sealed class Plate : IPlate
 {
     private int _uses = 0;
+    private ConsumableStates _state = ConsumableStates.Available;
     private readonly FoilSeal _foilSeal;
 
     public Plate(int id, string name, ReusePolicy reusePolicy, ILocation? location,
         IReadOnlyList<WellColumn> wellColumns, FoilSealPolicy foilSealPolicy)
     {
         Id = id;
+        UniqueIdentifier = Guid.NewGuid();
         Name = name;
         Type = ConsumableTypes.NinetySixWellPlate; // stinky (use a factory to build a plate)
-        State = ConsumableStates.Available;
+        State = _state;
         ReusePolicy = reusePolicy;
         Uses = 0;
         Location = location;
@@ -28,6 +30,7 @@ public sealed class Plate : IPlate
     }
     
     public int Id { get; }
+    public Guid UniqueIdentifier { get; }
     public string Name { get; }
     public ConsumableTypes Type { get; }
     public ConsumableStates State { get; }
@@ -40,19 +43,15 @@ public sealed class Plate : IPlate
     /// <inheritdoc />
     public void AddVolume(Volume[] volumes, int columnIndex)
     {
-        var wellColumn = ValidateColumnIndex(columnIndex);
-        if (FoilSealPolicy.IsFoilSealed && _foilSeal.IsWellColumnSealed(columnIndex)) 
-            throw new PlateFoilSealException(this, nameof(AddVolume), columnIndex);
-        wellColumn.AddVolume(volumes);
+        ValidatePlateStateForVolumeChange(columnIndex, nameof(AddVolume));
+        WellColumns[columnIndex].AddVolume(volumes);
     }
 
     /// <inheritdoc />
     public void RemoveVolume(Volume[] volumes, int columnIndex)
     {
-        var wellColumn = ValidateColumnIndex(columnIndex);
-        if (FoilSealPolicy.IsFoilSealed && _foilSeal.IsWellColumnSealed(columnIndex)) 
-            throw new PlateFoilSealException(this, nameof(RemoveVolume), columnIndex);
-        wellColumn.RemoveVolume(volumes);
+        ValidatePlateStateForVolumeChange(columnIndex, nameof(RemoveVolume));
+        WellColumns[columnIndex].RemoveVolume(volumes);
     }
 
     /// <inheritdoc />
@@ -62,10 +61,30 @@ public sealed class Plate : IPlate
             _foilSeal.PierceWellColumnSeals(columnIndex);
     }
 
-    private WellColumn ValidateColumnIndex(int columnIndex)
+    private void CheckColumnIndex(int columnIndex)
     {
         if (columnIndex < 0 || columnIndex >= WellColumns.Count)
             throw new IndexOutOfRangeException($"Column index {columnIndex} is out of range (0 < index < {WellColumns.Count}).");
-        return WellColumns[columnIndex];
+    }
+
+    private void CheckFoilSeal(int columnIndex, string operation)
+    {
+        if (FoilSealPolicy.IsFoilSealed && _foilSeal.IsWellColumnSealed(columnIndex)) 
+            throw new PlateFoilSealException(this, operation, columnIndex);
+    }
+
+    private void CheckReuse()
+    {
+        if (!ReusePolicy.CanUse(_uses))
+            throw new OutOfUsesException(_uses, ReusePolicy.MaxUses.Value);
+    }
+
+    private void ValidatePlateStateForVolumeChange(int columnIndex, string operation)
+    {
+        if (State != ConsumableStates.Available)
+            throw new InvalidConsumableStateException(State, ConsumableStates.Available);
+        CheckReuse();
+        CheckColumnIndex(columnIndex);
+        CheckFoilSeal(columnIndex, operation);
     }
 }
