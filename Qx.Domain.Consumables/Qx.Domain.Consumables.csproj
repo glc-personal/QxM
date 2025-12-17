@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Utilities\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Qx.Core\Qx.Core.csproj" />
+      <ProjectReference Include="..\Qx.Domain.Liquids\Qx.Domain.Liquids.csproj" />
+      <ProjectReference Include="..\Qx.Domain.Locations\Qx.Domain.Locations.csproj" />
+    </ItemGroup>
+
+</Project>
