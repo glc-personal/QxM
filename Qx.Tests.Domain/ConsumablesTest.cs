@@ -100,6 +100,28 @@ public class ConsumablesTest
         // ensure adding less than capacity works as expected
     }
 
+    [Test]
+    public void TipTests()
+    {
+        var overuseTip = SetupTip(1000.0, 2);
+        var overcapacityTip = SetupTip(50.0, 2);
+        
+        // ensure adding volume to the tip works and that reuse works
+        overuseTip.AddVolume(new Volume(200.0, VolumeUnits.Ul));
+        overuseTip.AddVolume(new Volume(200.0, VolumeUnits.Ul));
+        // ensure adding more volume when tip is consumed is caught
+        Assert.Catch<OutOfUsesException>(() =>
+        {
+            overuseTip.AddVolume(new Volume(200.0, VolumeUnits.Ul));
+        });
+
+        // ensure overcapacity is caught
+        Assert.Catch<MaximumVolumeExceededException>(() =>
+        {
+            overcapacityTip.AddVolume(new Volume(200.0, VolumeUnits.Ul));
+        });
+    }
+
     private IReadOnlyList<Well> SetupWells()
     {
         var well1 = new Well(WellTypes.Circle,
@@ -127,5 +149,15 @@ public class ConsumablesTest
             wellColumns,
             new FoilSealPolicy(true));
         return plate;
+    }
+
+    private Tip SetupTip(double tipCapacityUl, int numberOfReuses)
+    {
+        return new Tip(0,
+            new ReusePolicy(true, numberOfReuses),
+            null,
+            new VolumeContainerCapacity(new Volume(tipCapacityUl, VolumeUnits.Ul)
+            )
+        );
     }
 }
