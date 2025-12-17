@@ -1,4 +1,5 @@
 using Qx.Domain.Consumables.Enums;
+using Qx.Domain.Consumables.Interfaces;
 using Qx.Domain.Consumables.Records;
 using Qx.Domain.Liquids.Exceptions;
 using Qx.Domain.Liquids.Records;
@@ -8,11 +9,11 @@ namespace Qx.Domain.Consumables.Implementations;
 /// <summary>
 /// Well for holding a liquid
 /// </summary>
-public class Well
+public class Well : IVolumeContainer
 {
     private Volume _volume;
 
-    public Well(WellTypes type, WellAddress address, Volume volume, WellCapacity capacity)
+    public Well(WellTypes type, WellAddress address, Volume volume, VolumeContainerCapacity capacity)
     {
         if (volume > capacity.Maximum)
             throw new MaximumVolumeExceededException(volume, capacity.Maximum);
@@ -41,7 +42,7 @@ public class Well
     /// <summary>
     /// Well volume capacity
     /// </summary>
-    public WellCapacity Capacity { get; }
+    public VolumeContainerCapacity Capacity { get; }
     
     /// <summary>
     /// Row index of the well

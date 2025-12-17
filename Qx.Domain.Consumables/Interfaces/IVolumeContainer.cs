@@ -4,21 +4,27 @@ using Qx.Domain.Liquids.Records;
 
 namespace Qx.Domain.Consumables.Interfaces;
 
-public interface IVolumeContainer : IConsumable
+public interface IVolumeContainer
 {
-    IReadOnlyList<WellColumn> WellColumns { get; }
+    /// <summary>
+    /// Current volume of the container
+    /// </summary>
+    Volume Volume { get; }
     
     /// <summary>
-    /// Add volume to the container to all wells in a particular column
+    /// Volume capacity of the container
     /// </summary>
-    /// <param name="volumes">Volumes to be added</param>
-    /// <param name="columnIndex">Column index of the wells the volume is added to</param>
-    public void AddVolume(Volume[] volumes, int columnIndex);
+    VolumeContainerCapacity Capacity { get; }
     
     /// <summary>
-    /// Remove volume from the container from all the wells in a particular column
+    /// Add volume to the container
     /// </summary>
-    /// <param name="volumes">Volumes to be removed</param>
-    /// <param name="columnIndex">Column index of the wells the volume will be removed from</param>
-    public void RemoveVolume(Volume[] volumes, int columnIndex);
+    /// <param name="volume">Volume to be added</param>
+    void AddVolume(Volume volume);
+    
+    /// <summary>
+    /// Remove volume from the container
+    /// </summary>
+    /// <param name="volume">Volume to be removed</param>
+    void RemoveVolume(Volume volume);
 }

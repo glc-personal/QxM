@@ -1,4 +1,5 @@
 using Qx.Domain.Consumables.Enums;
+using Qx.Domain.Consumables.Exceptions;
 using Qx.Domain.Consumables.Implementations;
 using Qx.Domain.Consumables.Records;
 using Qx.Domain.Liquids.Enums;
@@ -21,7 +22,7 @@ public class ConsumablesTest
         var well = new Well(WellTypes.Circle,
             new WellAddress(0, 0),
             new Volume(200.0, VolumeUnits.Ul),
-            new WellCapacity(
+            new VolumeContainerCapacity(
                 new Volume(1000.0, VolumeUnits.Ul)
             )
         );
@@ -51,7 +52,7 @@ public class ConsumablesTest
             var badWell = new Well(WellTypes.Circle,
                 new WellAddress(0, 0),
                 new Volume(200.0, VolumeUnits.Ul),
-                new WellCapacity(new Volume(
+                new VolumeContainerCapacity(new Volume(
                     100.0, VolumeUnits.Ul)
                 )
             );
@@ -77,13 +78,24 @@ public class ConsumablesTest
     }
     
     [Test]
-    public void LiquidContainerVolumeTests()
+    public void PlateVolumeTests()
     {
         var wells = SetupWells();
         var wellColumn = SetupWellColumn(wells);
         var plate = SetupPlate([wellColumn]);
         
+        // ensure foil seal is pierced before adding or removing volume
+        Assert.Catch<PlateFoilSealException>(() =>
+        {
+            plate.AddVolume([new Volume(200.0, VolumeUnits.Ul), new Volume(50.0, VolumeUnits.Ul)], 0);
+        });
+
         // ensure adding too much excess volume to a well catches
+        Assert.Catch<MaximumVolumeExceededException>(() =>
+        {
+            plate.PierceFoilSeal(0);
+            plate.AddVolume([new Volume(1000.0, VolumeUnits.Ul), new Volume(50.0, VolumeUnits.Ul)], 0);
+        });
 
         // ensure adding less than capacity works as expected
     }
@@ -93,11 +105,11 @@ public class ConsumablesTest
         var well1 = new Well(WellTypes.Circle,
             new WellAddress(0, 0),
             new Volume(200.0, VolumeUnits.Ul),
-            new WellCapacity(new Volume(1000.0, VolumeUnits.Ul)));
+            new VolumeContainerCapacity(new Volume(1000.0, VolumeUnits.Ul)));
         var well2 = new Well(WellTypes.Circle,
             new WellAddress(0, 0),
             new Volume(0.0, VolumeUnits.Ul),
-            new WellCapacity(new Volume(500.0, VolumeUnits.Ul)));
+            new VolumeContainerCapacity(new Volume(500.0, VolumeUnits.Ul)));
         return [well1, well2];
     }
     
@@ -109,10 +121,11 @@ public class ConsumablesTest
     private Plate SetupPlate(IReadOnlyList<WellColumn> wellColumns)
     {
         var plate = new Plate(0,
-            ConsumableTypes.ReagentCartridge,
+            "96 well plate",
             new ReusePolicy(false, null),
             null,
-            wellColumns);
+            wellColumns,
+            new FoilSealPolicy(true));
         return plate;
     }
 }

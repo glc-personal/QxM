@@ -8,7 +8,7 @@ namespace Qx.Domain.Consumables.Interfaces;
 /// <summary>
 /// Consumable that can be used and reused
 /// </summary>
-public interface IConsumable : IIdentifiable
+public interface IConsumable : IIdentifiable, INameable
 {
     ConsumableTypes Type { get; }
     ConsumableStates State { get; }
