@@ -2,7 +2,7 @@ using Qx.Domain.Consumables.Enums;
 using Qx.Domain.Consumables.Exceptions;
 using Qx.Domain.Consumables.Interfaces;
 using Qx.Domain.Liquids.Records;
-using Qx.Domain.Locations.Interfaces;
+using Qx.Domain.Locations.Implementations;
 
 namespace Qx.Domain.Consumables.Implementations;
 
@@ -12,7 +12,7 @@ public sealed class Plate : IPlate
     private ConsumableStates _state = ConsumableStates.Available;
     private readonly FoilSeal _foilSeal;
 
-    public Plate(int id, string name, ReusePolicy reusePolicy, ILocation? location,
+    public Plate(int id, string name, ReusePolicy reusePolicy, Location? location,
         IReadOnlyList<WellColumn> wellColumns, FoilSealPolicy foilSealPolicy)
     {
         Id = id;
@@ -36,7 +36,7 @@ public sealed class Plate : IPlate
     public ConsumableStates State { get; }
     public ReusePolicy ReusePolicy { get; }
     public int Uses { get; }
-    public ILocation Location { get; }
+    public Location Location { get; }
     public IReadOnlyList<WellColumn> WellColumns { get; }
     public FoilSealPolicy FoilSealPolicy { get; }
 

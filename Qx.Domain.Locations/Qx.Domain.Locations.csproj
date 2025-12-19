@@ -7,7 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Qx.Core.Configuration\Qx.Core.Configuration.csproj" />
+      <ProjectReference Include="..\Qx.Core.Mathematics\Qx.Core.Mathematics.csproj" />
       <ProjectReference Include="..\Qx.Core\Qx.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Interfaces\" />
     </ItemGroup>
 
 </Project>

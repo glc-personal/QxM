@@ -1,4 +1,5 @@
 using Qx.Domain.Locations.Enums;
+using Qx.Domain.Locations.Implementations;
 
 namespace Qx.Domain.Locations.Utilities;
 

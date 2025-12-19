@@ -1,7 +1,7 @@
 using Qx.Core;
 using Qx.Domain.Consumables.Enums;
 using Qx.Domain.Consumables.Implementations;
-using Qx.Domain.Locations.Interfaces;
+using Qx.Domain.Locations.Implementations;
 
 namespace Qx.Domain.Consumables.Interfaces;
 
@@ -14,5 +14,5 @@ public interface IConsumable : IIdentifiable, INameable, IUniquelyIdentifiable
     ConsumableStates State { get; }
     ReusePolicy ReusePolicy { get; }
     int Uses { get; }
-    ILocation Location { get; }
+    Location Location { get; }
 }

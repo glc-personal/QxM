@@ -4,7 +4,7 @@ using Qx.Domain.Consumables.Interfaces;
 using Qx.Domain.Consumables.Records;
 using Qx.Domain.Liquids.Exceptions;
 using Qx.Domain.Liquids.Records;
-using Qx.Domain.Locations.Interfaces;
+using Qx.Domain.Locations.Implementations;
 
 namespace Qx.Domain.Consumables.Implementations;
 
@@ -14,7 +14,7 @@ public sealed class Tip : ITip
     private ConsumableStates _state = ConsumableStates.Available;
     private Volume _volume;
     
-    public Tip(int id, ReusePolicy reusePolicy, ILocation location, VolumeContainerCapacity capacity)
+    public Tip(int id, ReusePolicy reusePolicy, Location location, VolumeContainerCapacity capacity)
     {
         Id = id;
         ReusePolicy = reusePolicy;
@@ -33,7 +33,7 @@ public sealed class Tip : ITip
     public ConsumableStates State => _state;
     public ReusePolicy ReusePolicy { get; }
     public int Uses { get; }
-    public ILocation Location { get; }
+    public Location Location { get; }
     public Volume Volume => _volume;
     public VolumeContainerCapacity Capacity { get; }
     
