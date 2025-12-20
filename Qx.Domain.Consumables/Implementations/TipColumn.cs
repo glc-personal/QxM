@@ -1,12 +1,51 @@
+using Qx.Core;
+using Qx.Domain.Consumables.Enums;
+using Qx.Domain.Consumables.Interfaces;
+using Qx.Domain.Consumables.Utilities;
+using Qx.Domain.Locations.Enums;
+using Qx.Domain.Locations.Implementations;
+
 namespace Qx.Domain.Consumables.Implementations;
 
-public sealed class TipColumn(IReadOnlyList<Tip> tips)
+/// <summary>
+/// Column of tips
+/// </summary>
+public sealed class TipColumn : INameable
 {
-    IReadOnlyList<Tip> Tips => tips;
+    private IList<Tip> _tips;
     
-    // - don't keep track if a tip column is used or new since the tip itself tracks that
-    // - don't need to track which tips are where since the tips themselves know what kind of tips they are
-    // - need a way to ensure an orchestrator can determine which tips can be used on the fly for a run when
-    //   the run is scheduled and for scheduling future runs while a run is in progress or starting a run
-    //   during a run that is in progress
+    public TipColumn(int columnIndex)
+    {
+        Name = ConsumableNamingUtility.CreateColumnName(columnIndex);
+        _tips = new List<Tip>();
+        ColumnIndex = columnIndex;
+    }
+    
+    public int ColumnIndex { get; }
+    public int TipCount => _tips.Count;
+
+    /// <summary>
+    /// Add tips to the tip column
+    /// </summary>
+    /// <param name="tips">Tips to be added to the column</param>
+    public void AddTips(IList<Tip> tips)
+    {
+        _tips = tips;
+    }
+
+    /// <summary>
+    /// Remove the tips from the tip column
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Exception if tips are removed when there are no tips</exception>
+    /// <returns>the list of tips</returns>
+    public IList<Tip> RemoveTips()
+    {
+        if (_tips.Count == 0)
+            throw new InvalidOperationException($"Cannot remove tips, there are no tips to remove");
+        var tips = _tips;
+        _tips = new List<Tip>();
+        return tips;
+    }
+
+    public string Name { get; }
 }

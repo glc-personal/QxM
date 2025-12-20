@@ -1,23 +1,66 @@
 using Qx.Core;
+using Qx.Domain.Locations.Enums;
 
 namespace Qx.Domain.Locations.Implementations;
 
-public sealed record Location : IIdentifiable, INameable
+public sealed record Location : INameable, IUniquelyIdentifiable
 {
-    public Location(string name, int id, CoordinatePosition position)
-    {
-       Id = id;
-       Name = name;
-       Position = position;
-    }
+    private Position _position;
+    private AxisOffset _xAxisOffset = new(CoordinateAxes.X);
+    private AxisOffset _yAxisOffset = new(CoordinateAxes.Y);
+    private AxisOffset _zAxisOffset = new(CoordinateAxes.Z);
     
-    public static Location operator+(Location location, CoordinatePosition position)
-        => new Location(location.Name, location.Id, location.Position + position);
+    public Location(string name, Position position)
+    {
+       Name = name;
+       UniqueIdentifier = Guid.NewGuid();
+       _position = position;
+    }
 
-    public static Location operator -(Location location, CoordinatePosition position) 
-        => new Location(location.Name, location.Id, location.Position - position);
+    /// <summary>
+    /// Add an axis offset for when getting the position
+    /// </summary>
+    /// <param name="offset"></param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    public void AddAxisOffset(AxisOffset offset)
+    {
+        switch (offset.Axis)
+        {
+            case CoordinateAxes.X:
+                _xAxisOffset = offset;
+                break;
+            case CoordinateAxes.Y:
+                _yAxisOffset = offset;
+                break;
+            case CoordinateAxes.Z:
+                _zAxisOffset = offset;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException($"Unknown axis type: {offset.Axis}");
+        }
+    }
 
-    public int Id { get; }
     public string Name { get; }
-    public CoordinatePosition Position { get; }
+    public Guid UniqueIdentifier { get; }
+
+    public Position Position
+    {
+        get
+        {
+            try
+            {
+                var position = (CoordinatePosition)_position;
+                return new CoordinatePosition
+                {
+                    X = position.X + _xAxisOffset.Value,
+                    Y = position.Y + _yAxisOffset.Value,
+                    Z = position.Z + _zAxisOffset.Value
+                };
+            }
+            catch (Exception)
+            {
+                return _position;
+            }
+        }
+    }
 }

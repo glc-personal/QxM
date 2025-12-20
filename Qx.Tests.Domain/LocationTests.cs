@@ -46,7 +46,7 @@ public class LocationTests
         var deckSlotPos = new DeckSlotPosition(deckSlotName, batch);
         // look up the configured pos of the deck slot pos
         var pos = _deckSlotUtility.GetCoordinatePosition(deckSlotPos);
-        var location = new Location(locationName, 0, pos);
+        var location = new Location(locationName, pos);
         Assert.Pass();
     }
 

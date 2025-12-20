@@ -84,4 +84,19 @@ public sealed record CoordinatePosition : Position
     public double Z { get; init; }
     public CoordinatePositionUnits Units { get; init; }
 
+    public Range<double> GetRange(CoordinateAxes coordinateAxis)
+    {
+        switch (coordinateAxis)
+        {
+            case CoordinateAxes.X:
+                return _xRange;
+            case CoordinateAxes.Y:
+                return _yRange;
+            case CoordinateAxes.Z:
+                return _zRange;
+            default:
+                return null;
+        }
+    }
+
 }

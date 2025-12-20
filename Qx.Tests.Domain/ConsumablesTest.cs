@@ -1,10 +1,14 @@
+using System.ComponentModel;
 using Qx.Domain.Consumables.Enums;
 using Qx.Domain.Consumables.Exceptions;
 using Qx.Domain.Consumables.Implementations;
 using Qx.Domain.Consumables.Records;
+using Qx.Domain.Consumables.Utilities;
 using Qx.Domain.Liquids.Enums;
 using Qx.Domain.Liquids.Exceptions;
 using Qx.Domain.Liquids.Records;
+using Qx.Domain.Locations.Enums;
+using Qx.Domain.Locations.Implementations;
 
 namespace Qx.Tests.Domain;
 
@@ -122,6 +126,41 @@ public class ConsumablesTest
         });
     }
 
+    [Test]
+    public void TipColumnTests()
+    {
+        // Setup the tip column
+        var columnIndex = 0;
+        var nRows = 8;
+        var tipColumn = new TipColumn(columnIndex);
+        
+        // Ensure the name of the column is correct
+        Assert.That(ConsumableNamingUtility.CreateColumnName(columnIndex), Is.EqualTo(tipColumn.Name));
+        
+        // ensure there are no tips in the tip column to start
+        Assert.Catch<InvalidOperationException>(() =>
+        {
+            tipColumn.RemoveTips();
+        });
+        
+        // Add tips
+        var tips = new List<Tip>();
+        for (int i = 0; i < nRows; i++)
+            tips.Add(SetupTip(1000, 0));
+        tipColumn.AddTips(tips);
+        Assert.That(nRows, Is.EqualTo(tipColumn.TipCount));
+        
+        // Remove the tips
+        var removedTips = tipColumn.RemoveTips();
+        Assert.That(nRows, Is.EqualTo(removedTips.Count));
+        Assert.That(0, Is.EqualTo(tipColumn.TipCount));
+        Assert.Catch<InvalidOperationException>(() =>
+        {
+            tipColumn.RemoveTips();
+        });
+        
+    }
+
     private IReadOnlyList<Well> SetupWells()
     {
         var well1 = new Well(WellTypes.Circle,
@@ -153,8 +192,7 @@ public class ConsumablesTest
 
     private Tip SetupTip(double tipCapacityUl, int numberOfReuses)
     {
-        return new Tip(0,
-            new ReusePolicy(true, numberOfReuses),
+        return new Tip(new ReusePolicy(true, numberOfReuses),
             null,
             new VolumeContainerCapacity(new Volume(tipCapacityUl, VolumeUnits.Ul)
             )

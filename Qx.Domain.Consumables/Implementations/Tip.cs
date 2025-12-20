@@ -14,19 +14,17 @@ public sealed class Tip : ITip
     private ConsumableStates _state = ConsumableStates.Available;
     private Volume _volume;
     
-    public Tip(int id, ReusePolicy reusePolicy, Location location, VolumeContainerCapacity capacity)
+    public Tip(ReusePolicy reusePolicy, Location location, VolumeContainerCapacity capacity)
     {
-        Id = id;
         ReusePolicy = reusePolicy;
         Location = location;
         Capacity = capacity;
         Name = $"{Capacity.ToString()} tip";
         UniqueIdentifier = Guid.NewGuid();
-        Type = ConsumableTypes.TipRack;
+        Type = ConsumableTypes.Tip;
         Uses = _uses;
         _volume = new Volume(0.0, capacity.Maximum.Units);
     }
-    public int Id { get; }
     public string Name { get; }
     public Guid UniqueIdentifier { get; }
     public ConsumableTypes Type { get; }

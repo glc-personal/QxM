@@ -2,7 +2,9 @@ namespace Qx.Domain.Consumables.Enums;
 
 public enum ConsumableTypes
 {
-    TipRack,
+    Tip,
+    TipColumn,
+    TipBox,
     NinetySixWellPlate,
     ReagentCartridge,
     DeepWellPlate,
