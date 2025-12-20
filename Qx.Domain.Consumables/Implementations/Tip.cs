@@ -57,7 +57,7 @@ public sealed class Tip : ITip
         _uses++;
         GetState();
     }
-
+    
     private void CheckVolumeChange(Volume futureVolume)
     {
         if (futureVolume > Capacity.Maximum)

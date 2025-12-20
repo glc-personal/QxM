@@ -2,6 +2,7 @@ using System.ComponentModel;
 using Qx.Domain.Consumables.Enums;
 using Qx.Domain.Consumables.Exceptions;
 using Qx.Domain.Consumables.Implementations;
+using Qx.Domain.Consumables.Interfaces;
 using Qx.Domain.Consumables.Records;
 using Qx.Domain.Consumables.Utilities;
 using Qx.Domain.Liquids.Enums;
@@ -130,25 +131,28 @@ public class ConsumablesTest
     public void TipColumnTests()
     {
         // Setup the tip column
+        var maxUses = 1;
         var columnIndex = 0;
         var nRows = 8;
-        var tipColumn = new TipColumn(columnIndex);
+        var tipColumn = new TipColumn(columnIndex, new ReusePolicy(true, maxUses));
         
         // Ensure the name of the column is correct
         Assert.That(ConsumableNamingUtility.CreateColumnName(columnIndex), Is.EqualTo(tipColumn.Name));
         
-        // ensure there are no tips in the tip column to start
+        // ensure there are no tips in the tip column to start and the column is in the correct state
         Assert.Catch<InvalidOperationException>(() =>
         {
             tipColumn.RemoveTips();
         });
+        Assert.That(ConsumableStates.Available, Is.EqualTo(tipColumn.State));
         
         // Add tips
         var tips = new List<Tip>();
         for (int i = 0; i < nRows; i++)
-            tips.Add(SetupTip(1000, 0));
+            tips.Add(SetupTip(1000));
         tipColumn.AddTips(tips);
         Assert.That(nRows, Is.EqualTo(tipColumn.TipCount));
+        Assert.That(ConsumableStates.InUse, Is.EqualTo(tipColumn.State));
         
         // Remove the tips
         var removedTips = tipColumn.RemoveTips();
@@ -158,7 +162,16 @@ public class ConsumablesTest
         {
             tipColumn.RemoveTips();
         });
+        Assert.That(ConsumableStates.Available, Is.EqualTo(tipColumn.State));
         
+        // ensure we can't use the tip column again since we hit max uses
+        tipColumn.AddTips(removedTips);
+        Assert.That(nRows, Is.EqualTo(tipColumn.TipCount));
+        Assert.That(ConsumableStates.InUse, Is.EqualTo(tipColumn.State));
+        Assert.Catch<OutOfUsesException>(() =>
+        {
+            tipColumn.RemoveTips();
+        });
     }
 
     private IReadOnlyList<Well> SetupWells()
@@ -190,7 +203,7 @@ public class ConsumablesTest
         return plate;
     }
 
-    private Tip SetupTip(double tipCapacityUl, int numberOfReuses)
+    private Tip SetupTip(double tipCapacityUl, int? numberOfReuses = null)
     {
         return new Tip(new ReusePolicy(true, numberOfReuses),
             null,

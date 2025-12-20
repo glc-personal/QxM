@@ -19,7 +19,15 @@ public sealed class ReusePolicy
 
     public bool CanUse(int uses)
     {
-        if (IsReusable && MaxUses > uses)
+        if (IsReusable)
+        {
+            if (MaxUses == null)
+                return true;
+            if (MaxUses > uses)
+                return true;
+            return false;
+        }
+        if (uses == 0)
             return true;
         return false;
     }

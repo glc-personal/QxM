@@ -1,8 +1,7 @@
-using Qx.Core;
 using Qx.Domain.Consumables.Enums;
+using Qx.Domain.Consumables.Exceptions;
 using Qx.Domain.Consumables.Interfaces;
 using Qx.Domain.Consumables.Utilities;
-using Qx.Domain.Locations.Enums;
 using Qx.Domain.Locations.Implementations;
 
 namespace Qx.Domain.Consumables.Implementations;
@@ -10,14 +9,22 @@ namespace Qx.Domain.Consumables.Implementations;
 /// <summary>
 /// Column of tips
 /// </summary>
-public sealed class TipColumn : INameable
+public sealed class TipColumn : IConsumable
 {
     private IList<Tip> _tips;
+    private int _uses;
+    private ConsumableStates _state;
     
-    public TipColumn(int columnIndex)
+    public TipColumn(int columnIndex, ReusePolicy reusePolicy)
     {
         Name = ConsumableNamingUtility.CreateColumnName(columnIndex);
+        UniqueIdentifier = Guid.NewGuid();
+        Type = ConsumableTypes.TipColumn;
+        _state = ConsumableStates.Available; // available because it is free for tips (in use means it has tips in it)
+        ReusePolicy = reusePolicy;
+        _uses = 0;
         _tips = new List<Tip>();
+        Location = new Location(Name, new ColumnPosition(columnIndex));
         ColumnIndex = columnIndex;
     }
     
@@ -30,7 +37,10 @@ public sealed class TipColumn : INameable
     /// <param name="tips">Tips to be added to the column</param>
     public void AddTips(IList<Tip> tips)
     {
+        if (_state == ConsumableStates.InUse)
+            throw new InvalidOperationException($"Cannot add tips to this column ({Name}), it is already in use.");
         _tips = tips;
+        _state = ConsumableStates.InUse;
     }
 
     /// <summary>
@@ -40,12 +50,23 @@ public sealed class TipColumn : INameable
     /// <returns>the list of tips</returns>
     public IList<Tip> RemoveTips()
     {
-        if (_tips.Count == 0)
+        if (_state == ConsumableStates.Available)
             throw new InvalidOperationException($"Cannot remove tips, there are no tips to remove");
+        if (!ReusePolicy.CanUse(_uses))
+            throw new OutOfUsesException(_uses, ReusePolicy.MaxUses.Value);
+        
         var tips = _tips;
         _tips = new List<Tip>();
+        _uses += 1;
+        _state = _uses > ReusePolicy.MaxUses ? ConsumableStates.Consumed : ConsumableStates.Available;
         return tips;
     }
 
     public string Name { get; }
+    public Guid UniqueIdentifier { get; }
+    public ConsumableTypes Type { get; }
+    public ConsumableStates State => _state;
+    public ReusePolicy ReusePolicy { get; }
+    public int Uses => _uses;
+    public Location Location { get; }
 }
