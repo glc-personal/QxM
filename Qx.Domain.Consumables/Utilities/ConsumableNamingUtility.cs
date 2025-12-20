@@ -15,7 +15,17 @@ public static class ConsumableNamingUtility
     {
         if (batch == BatchNames.None)
             return CreateConsumableName(deckSlotName, columnIndex);
-        return $"{deckSlotName}-{batch}-Column{columnIndex}";
+        return $"{deckSlotName}-{batch}-{CreateColumnName(columnIndex)}";
+    }
+
+    public static string CreateConsumableName(DeckSlotNames deckSlotName, BatchNames batch)
+    {
+        if (batch == BatchNames.None)
+        {
+            BatchNames[] validBatches = [BatchNames.A, BatchNames.B, BatchNames.C, BatchNames.D];
+            throw new ArgumentException($"Invalid batch name ({batch}), must be from {validBatches.ToString()}");
+        }
+        return $"{deckSlotName}-{batch}";
     }
 
     /// <summary>
@@ -26,7 +36,7 @@ public static class ConsumableNamingUtility
     /// <returns></returns>
     public static string CreateConsumableName(DeckSlotNames deckSlotName, int columnIndex)
     {
-        return $"{deckSlotName}-Column{columnIndex}";
+        return $"{deckSlotName}-{CreateColumnName(columnIndex)}";
     }
 
     /// <summary>
@@ -40,7 +50,7 @@ public static class ConsumableNamingUtility
     {
         if (batch == BatchNames.None)
             return CreateConsumableName(readerSlotName, columnIndex);
-        return $"{readerSlotName}-{batch}-Column{columnIndex}";
+        return $"{readerSlotName}-{batch}-{CreateColumnName(columnIndex)}";
     }
 
     /// <summary>
@@ -51,7 +61,7 @@ public static class ConsumableNamingUtility
     /// <returns></returns>
     public static string CreateConsumableName(ReaderSlotNames readerSlotName, int columnIndex)
     {
-        return $"{readerSlotName}-Column{columnIndex}";
+        return $"{readerSlotName}-{CreateColumnName(columnIndex)}";
     }
 
     /// <summary>

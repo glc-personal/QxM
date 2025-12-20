@@ -134,7 +134,7 @@ public class ConsumablesTest
         var maxUses = 1;
         var columnIndex = 0;
         var nRows = 8;
-        var tipColumn = new TipColumn(columnIndex, new ReusePolicy(true, maxUses));
+        var tipColumn = new TipColumn(columnIndex, nRows, new ReusePolicy(true, maxUses));
         
         // Ensure the name of the column is correct
         Assert.That(ConsumableNamingUtility.CreateColumnName(columnIndex), Is.EqualTo(tipColumn.Name));
@@ -147,7 +147,7 @@ public class ConsumablesTest
         Assert.That(ConsumableStates.Available, Is.EqualTo(tipColumn.State));
         
         // Add tips
-        var tips = new List<Tip>();
+        var tips = new List<ITip>();
         for (int i = 0; i < nRows; i++)
             tips.Add(SetupTip(1000));
         tipColumn.AddTips(tips);
@@ -172,6 +172,68 @@ public class ConsumablesTest
         {
             tipColumn.RemoveTips();
         });
+    }
+
+    [Test]
+    public void ConsumableNamingUtility_Test()
+    {
+        // ensure attempting to create a consumable name with a deck slot and batch fails if batch is set to none
+        Assert.Catch<ArgumentException>(() =>
+        {
+            var name = ConsumableNamingUtility.CreateConsumableName(DeckSlotNames.TipBox, BatchNames.None);
+        });
+    }
+
+    [Test]
+    public void TipBox_Test()
+    {
+        var numberOfColumns = 12;
+        var numberOfRows = 8;
+        var columnReusePolicy = new ReusePolicy(true);
+        var tipBox = new TipBox(BatchNames.A, numberOfColumns, numberOfRows, columnReusePolicy);
+        
+        // ensure the name of the tip box is correct
+        Assert.That(ConsumableNamingUtility.CreateConsumableName(DeckSlotNames.TipBox, BatchNames.A), Is.EqualTo(tipBox.Name));
+        Assert.That(ConsumableNamingUtility.CreateConsumableName(DeckSlotNames.TipBox, BatchNames.A, 0), Is.EqualTo(tipBox.Name + "-" + tipBox.TipColumns[0].Name));
+        
+        // ensure there are no tips in any of the columns
+        foreach (TipColumn tipColumn in tipBox.TipColumns.Values)
+            Assert.IsTrue(tipColumn.IsEmpty());
+        
+        // ensure there are the correct number of columns and rows in the tip box
+        Assert.That(numberOfColumns, Is.EqualTo(tipBox.NumberOfColumns));
+        Assert.That(numberOfRows, Is.EqualTo(tipBox.NumberOfRows));
+        
+        // add new tips to the tip box
+        var oneMlTip = SetupTip(1000.0);
+        int[] oneMlTipColumnIndexes = [0, 1, 2, 3];
+        var fiftyUlTip = SetupTip(50.0);
+        int[] fiftyUlTipColumnIndexes = [4, 5, 6, 7];
+        var twoHundredUlTip = SetupTip(200.0);
+        int[] twoHundredUlTipColumnIndexes = [8,9,10,11];
+        tipBox.AddNewTips(oneMlTip, oneMlTipColumnIndexes, false);
+        tipBox.AddNewTips(fiftyUlTip, fiftyUlTipColumnIndexes, false);
+        tipBox.AddNewTips(twoHundredUlTip, twoHundredUlTipColumnIndexes, false);
+        
+        // ensure tips are the correct types
+        foreach (var columnIndex in oneMlTipColumnIndexes) 
+            Assert.That(tipBox.TipColumns[columnIndex].TipType, Is.EqualTo(oneMlTip.Type));
+        foreach (var columnIndex in fiftyUlTipColumnIndexes) 
+            Assert.That(tipBox.TipColumns[columnIndex].TipType, Is.EqualTo(fiftyUlTip.Type));
+        foreach (var columnIndex in twoHundredUlTipColumnIndexes) 
+            Assert.That(tipBox.TipColumns[columnIndex].TipType, Is.EqualTo(twoHundredUlTip.Type));
+        
+        // ensure adding another tip fails
+        Assert.Catch<InvalidOperationException>(() =>
+        {
+            tipBox.AddNewTips(oneMlTip, [0, 5, 9], false);
+        });
+        Assert.Catch<InvalidOperationException>(() =>
+        {
+            tipBox.AddNewTips(oneMlTip, [7, 5, 9], true); 
+        });
+        
+        // TODO: ensure removing tips works
     }
 
     private IReadOnlyList<Well> SetupWells()

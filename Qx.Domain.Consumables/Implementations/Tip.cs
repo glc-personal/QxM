@@ -2,6 +2,7 @@ using Qx.Domain.Consumables.Enums;
 using Qx.Domain.Consumables.Exceptions;
 using Qx.Domain.Consumables.Interfaces;
 using Qx.Domain.Consumables.Records;
+using Qx.Domain.Consumables.Utilities;
 using Qx.Domain.Liquids.Exceptions;
 using Qx.Domain.Liquids.Records;
 using Qx.Domain.Locations.Implementations;
@@ -13,15 +14,16 @@ public sealed class Tip : ITip
     private int _uses = 0;
     private ConsumableStates _state = ConsumableStates.Available;
     private Volume _volume;
+    private readonly ConsumableTypes _type;
     
     public Tip(ReusePolicy reusePolicy, Location location, VolumeContainerCapacity capacity)
     {
         ReusePolicy = reusePolicy;
         Location = location;
         Capacity = capacity;
-        Name = $"{Capacity.ToString()} tip";
+        Name = $"{Capacity} tip";
         UniqueIdentifier = Guid.NewGuid();
-        Type = ConsumableTypes.Tip;
+        Type = TipUtility.GetConsumableTypeFromTipCapacity(capacity);
         Uses = _uses;
         _volume = new Volume(0.0, capacity.Maximum.Units);
     }
@@ -57,7 +59,10 @@ public sealed class Tip : ITip
         _uses++;
         GetState();
     }
-    
+
+    public ITip ShallowCopy()
+        => new Tip(ReusePolicy, Location, Capacity);
+
     private void CheckVolumeChange(Volume futureVolume)
     {
         if (futureVolume > Capacity.Maximum)

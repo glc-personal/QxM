@@ -63,7 +63,7 @@ public readonly record struct Volume
 
     public override string ToString()
     {
-        return $"{Value} ({Units})";
+        return $"{Value} {Units}";
     }
 
     public Volume ToUnits(VolumeUnits units)
