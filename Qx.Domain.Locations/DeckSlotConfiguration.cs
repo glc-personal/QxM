@@ -22,7 +22,7 @@ public class DeckSlotConfiguration : IConfiguration<DeckSlotConfigModel, Enum>
         var pos = batch[(BatchNames)keys[1]];
         value = pos;
     }
-
+    
     public void Configure(string filePath)
     {
         throw new NotImplementedException();

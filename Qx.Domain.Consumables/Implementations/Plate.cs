@@ -12,10 +12,9 @@ public sealed class Plate : IPlate
     private ConsumableStates _state = ConsumableStates.Available;
     private readonly FoilSeal _foilSeal;
 
-    public Plate(int id, string name, ReusePolicy reusePolicy, Location? location,
+    public Plate(string name, ReusePolicy reusePolicy, Location? location,
         IReadOnlyList<WellColumn> wellColumns, FoilSealPolicy foilSealPolicy)
     {
-        Id = id;
         UniqueIdentifier = Guid.NewGuid();
         Name = name;
         Type = ConsumableTypes.NinetySixWellPlate; // stinky (use a factory to build a plate)
@@ -29,7 +28,6 @@ public sealed class Plate : IPlate
             _foilSeal = new FoilSeal(WellColumns.Count);
     }
     
-    public int Id { get; }
     public Guid UniqueIdentifier { get; }
     public string Name { get; }
     public ConsumableTypes Type { get; }

@@ -256,8 +256,7 @@ public class ConsumablesTest
     
     private Plate SetupPlate(IReadOnlyList<WellColumn> wellColumns)
     {
-        var plate = new Plate(0,
-            "96 well plate",
+        var plate = new Plate("96 well plate",
             new ReusePolicy(false, null),
             null,
             wellColumns,

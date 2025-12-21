@@ -1,5 +1,3 @@
-using Qx.Domain.Consumables.Implementations;
-
 namespace Qx.Domain.Consumables.Interfaces;
 
 public interface ITipBox : IConsumable

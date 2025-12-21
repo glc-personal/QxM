@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8"/>
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.22" />
+        <PackageReference Include="Serilog" Version="4.3.0" />
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="10.0.0" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="10.0.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
+        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Qx.Application.Services\Qx.Application.Services.csproj" />
+      <ProjectReference Include="..\Qx.Services.InstrumentOrchestrator\Qx.Services.InstrumentOrchestrator.csproj" />
+      <ProjectReference Include="..\Qx.Services.InstrumentScheduler\Qx.Services.InstrumentScheduler.csproj" />
+      <ProjectReference Include="..\Qx.Services.RunOrchestrator\Qx.Services.RunOrchestrator.csproj" />
+      <ProjectReference Include="..\Qx.Services.RunScheduler\Qx.Services.RunScheduler.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Configuration\" />
+      <Folder Include="Dtos\" />
+    </ItemGroup>
+
+</Project>
