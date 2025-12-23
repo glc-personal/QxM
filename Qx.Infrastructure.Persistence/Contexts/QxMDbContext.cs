@@ -183,12 +183,23 @@ public class QxMDbContext : DbContext
         entity.Property(e => e.Version)
             .IsRequired()
             .HasMaxLength(100);
-        entity.Property(e => e.Rows)
+        entity.Property(e => e.RowCount)
             .IsRequired();
-        entity.Property(e => e.Columns)
+        entity.Property(e => e.ColumnCount)
             .IsRequired();
-        entity.Property(e => e.GeometryJson)
-            .HasMaxLength(1000)
+        entity.Property(e => e.ColumnOffsetMm)
+            .IsRequired();
+        entity.Property(e => e.RowOffsetMm)
+            .IsRequired();
+        entity.Property(e => e.LengthMm)
+            .IsRequired();
+        entity.Property(e => e.WidthMm)
+            .IsRequired();
+        entity.Property(e => e.HeightMm)
+            .IsRequired();
+        entity.Property(e => e.FirstColumnOffsetMm)
+            .IsRequired();
+        entity.Property(e => e.HeightOffDeckMm)
             .IsRequired();
         entity.Property(e => e.DefaultIsReusable)
             .IsRequired();

@@ -123,8 +123,11 @@ namespace Qx.Infrastructure.Persistence.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<int>("Columns")
+                    b.Property<int>("ColumnCount")
                         .HasColumnType("integer");
+
+                    b.Property<double>("ColumnOffsetMm")
+                        .HasColumnType("double precision");
 
                     b.Property<bool>("DefaultIsReusable")
                         .HasColumnType("boolean");
@@ -132,20 +135,34 @@ namespace Qx.Infrastructure.Persistence.Migrations
                     b.Property<int?>("DefaultMaxUses")
                         .HasColumnType("integer");
 
-                    b.Property<string>("GeometryJson")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<double>("FirstColumnOffsetMm")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("HeightMm")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("HeightOffDeckMm")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("LengthMm")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Rows")
+                    b.Property<int>("RowCount")
                         .HasColumnType("integer");
+
+                    b.Property<double>("RowOffsetMm")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Version")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<double>("WidthMm")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 

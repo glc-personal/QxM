@@ -11,4 +11,18 @@ public struct Version
     {
         return $"{Major}.{Minor}.{Build}.{Revision}";
     }
+
+    public static Version Parse(string version)
+    {
+        string[] parts = version.Split('.');
+        if (parts.Length != 4) throw new FormatException($"Invalid version ({version}) format. Expected major.minor.build.revision.");
+        var intParts = parts.Select(p => int.TryParse(p, out int _) ? int.Parse(p) : throw new FormatException($"Invalid version ({version}) format. Expected an integer for {p}")).ToList();
+        return new Version
+        {
+            Major = intParts[0],
+            Minor = intParts[1],
+            Build = intParts[2],
+            Revision = intParts[3]
+        };
+    }
 }

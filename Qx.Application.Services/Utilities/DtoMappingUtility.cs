@@ -17,9 +17,15 @@ public static class DtoMappingUtility
             Id = consumableType.UniqueIdentifier,
             Name = consumableType.Name,
             Version = consumableType.Version.ToString(),
-            RowCount = consumableType.RowCount,
-            ColumnCount = consumableType.ColumnCount,
-            Geometry = consumableType.Geometry,
+            RowCount = consumableType.Geometry.RowCount,
+            ColumnCount = consumableType.Geometry.ColumnCount,
+            ColumnOffsetMm = consumableType.Geometry.ColumnOffsetMm,
+            RowOffsetMm = consumableType.Geometry.RowOffsetMm,
+            LengthMm = consumableType.Geometry.LengthMm,
+            WidthMm = consumableType.Geometry.WidthMm,
+            HeightMm = consumableType.Geometry.HeightMm,
+            FirstColumnOffsetMm = consumableType.Geometry.FirstColumnOffsetMm,
+            HeightOffDeckMm = consumableType.Geometry.HeightOffDeckMm,
             DefaultIsReusable = consumableType.DefaultIsReusable,
             DefaultMaxUses = consumableType.DefaultMaxUses
         };

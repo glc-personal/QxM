@@ -31,9 +31,39 @@ public sealed class ConsumableTypeDto
     public int ColumnCount { get; init; }
     
     /// <summary>
-    /// Geometry meta data of the consumable
+    /// Spacing between columns in millimeters
     /// </summary>
-    public string Geometry { get; init; }
+    public double ColumnOffsetMm { get; init; }
+    
+    /// <summary>
+    /// Spacing between rows in millimeters
+    /// </summary>
+    public double RowOffsetMm { get; init; }
+    
+    /// <summary>
+    /// Consumable length in millimeters
+    /// </summary>
+    public double LengthMm { get; init; }
+    
+    /// <summary>
+    /// Consumable width in millimeters (row-wise)
+    /// </summary>
+    public double WidthMm { get; init; }
+    
+    /// <summary>
+    /// Consumable height in millimeters
+    /// </summary>
+    public double HeightMm { get; init; }
+    
+    /// <summary>
+    /// Distance to the first column from the beginning of the consumable in millimeters
+    /// </summary>
+    public double FirstColumnOffsetMm { get; init; }
+    
+    /// <summary>
+    /// Height from the deck and the top of the consumable in millimeters
+    /// </summary>
+    public double HeightOffDeckMm { get; init; }
     
     /// <summary>
     /// Default is reusable value for the consumable

@@ -1,9 +1,11 @@
 using Qx.Domain.Consumables.Enums;
 using Qx.Domain.Consumables.Implementations;
 using Qx.Domain.Consumables.Interfaces;
+using Qx.Domain.Consumables.Records;
 using Qx.Domain.Consumables.Utilities;
 using Qx.Domain.Liquids.Enums;
 using Qx.Infrastructure.Persistence.Entities;
+using Version = Qx.Core.Version;
 
 namespace Qx.Infrastructure.Persistence.Utilities;
 
@@ -32,11 +34,13 @@ public static class DomainMappingUtility
     public static IConsumableType MapToDomain(ConsumableTypeEntity entity)
     {
         var name = (ConsumableTypes)Enum.Parse(typeof(ConsumableTypes), entity.Name);
-        var rowCount = entity.Rows;
-        var columnCount = entity.Columns;
-        var geometry = entity.GeometryJson;
-
-        return new ConsumableType(name, rowCount, columnCount, geometry);
+        var version = Version.Parse(entity.Version);
+        var geometry = new ConsumableGeometry(entity.ColumnCount, entity.RowCount,
+            entity.ColumnOffsetMm, entity.RowOffsetMm, 
+            entity.LengthMm, entity.WidthMm, entity.HeightMm,
+            entity.FirstColumnOffsetMm, entity.HeightOffDeckMm);
+        
+        return new ConsumableType(name, geometry, version, entity.DefaultIsReusable, entity.DefaultMaxUses);
     }
 
     private static ConsumableColumn MapToDomain(ConsumableColumnEntity entity)
