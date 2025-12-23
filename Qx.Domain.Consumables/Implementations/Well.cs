@@ -16,7 +16,7 @@ public class Well : IVolumeContainer
     public Well(WellTypes type, WellAddress address, Volume volume, VolumeContainerCapacity capacity)
     {
         if (volume > capacity.Maximum)
-            throw new MaximumVolumeExceededException(volume, capacity.Maximum);
+            throw new CapacityExceededException(volume, capacity.Maximum);
         
         Type = type;
         Address = address;
@@ -29,6 +29,7 @@ public class Well : IVolumeContainer
     /// </summary>
     public WellTypes Type { get; }
 
+    // TODO: Could remove and use a private _address to keep track of row and column indeces
     /// <summary>
     /// Well address
     /// </summary>
@@ -62,7 +63,7 @@ public class Well : IVolumeContainer
     {
         var combinedVolume = _volume + volume;
         if (combinedVolume > Capacity.Maximum)
-            throw new MaximumVolumeExceededException(combinedVolume, Capacity.Maximum);
+            throw new CapacityExceededException(combinedVolume, Capacity.Maximum);
         _volume = combinedVolume;
     }
 

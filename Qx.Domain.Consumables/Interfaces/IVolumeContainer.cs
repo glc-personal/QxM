@@ -1,30 +1,41 @@
+using Qx.Core;
 using Qx.Domain.Consumables.Implementations;
 using Qx.Domain.Consumables.Records;
 using Qx.Domain.Liquids.Records;
 
 namespace Qx.Domain.Consumables.Interfaces;
 
-public interface IVolumeContainer
+public interface IVolumeContainer : IUniquelyIdentifiable
 {
+    /// <summary>
+    /// Reuse policy of the container
+    /// </summary>
+    ReusePolicy ReusePolicy { get; }
+    
+    /// <summary>
+    /// Seal policy of the container
+    /// </summary>
+    SealPolicy SealPolicy { get; }
+    
     /// <summary>
     /// Current volume of the container
     /// </summary>
-    Volume Volume { get; }
+    IList<Volume> Volumes { get; }
     
     /// <summary>
     /// Volume capacity of the container
     /// </summary>
-    VolumeContainerCapacity Capacity { get; }
+    IList<VolumeContainerCapacity> Capacities { get; }
     
     /// <summary>
     /// Add volume to the container
     /// </summary>
     /// <param name="volume">Volume to be added</param>
-    void AddVolume(Volume volume);
+    void AddVolume(IList<Volume> volumes);
     
     /// <summary>
     /// Remove volume from the container
     /// </summary>
     /// <param name="volume">Volume to be removed</param>
-    void RemoveVolume(Volume volume);
+    void RemoveVolume(IList<Volume> volumes);
 }

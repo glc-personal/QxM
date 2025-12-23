@@ -66,7 +66,7 @@ public sealed class Tip : ITip
     private void CheckVolumeChange(Volume futureVolume)
     {
         if (futureVolume > Capacity.Maximum)
-            throw new MaximumVolumeExceededException(futureVolume, Capacity.Maximum);
+            throw new CapacityExceededException(futureVolume, Capacity.Maximum);
     }
 
     private void CheckReuse()

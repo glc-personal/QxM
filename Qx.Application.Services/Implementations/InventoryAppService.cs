@@ -9,6 +9,13 @@ namespace Qx.Application.Services.Implementations;
 /// </summary>
 public class InventoryAppService : IInventoryAppService
 {
+    private readonly IInventoryRepository _repo;
+
+    public InventoryAppService(IInventoryRepository repo)
+    {
+        _repo = repo;
+    }
+    
     /// <inheritdoc/>
     public Task<InventoryDto> GetInventoryAsync(CancellationToken cancellationToken = default)
     {
@@ -22,13 +29,19 @@ public class InventoryAppService : IInventoryAppService
     }
 
     /// <inheritdoc/>
-    public Task<IPlate> GetPlateAsync(Guid id, CancellationToken cancellationToken = default)
+    public Task AddConsumableAsync(IConsumable consumable, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
 
     /// <inheritdoc/>
-    public Task<ITipBox> GetTipBoxAsync(Guid id, CancellationToken cancellationToken = default)
+    public Task<IConsumable> GetConsumableAsync(Guid consumableId, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritdoc/>
+    public Task RemoveConsumableAsync(Guid consumableId, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

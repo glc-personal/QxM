@@ -15,4 +15,9 @@ public interface IConsumable : INameable, IUniquelyIdentifiable
     ReusePolicy ReusePolicy { get; }
     int Uses { get; }
     Location Location { get; }
+    int NumberOfColumns { get; }
+    int NumberOfRows { get; }
+    IList<ConsumableColumn> Columns { get; }
+    void OverrideUses(int value);
+    void OverrideState(ConsumableStates value);
 }

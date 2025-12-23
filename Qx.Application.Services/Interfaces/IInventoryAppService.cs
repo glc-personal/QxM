@@ -20,20 +20,28 @@ public interface IInventoryAppService
     Task ResetInventoryAsync(CancellationToken cancellationToken = default);
     
     /// <summary>
-    /// Get a plate by its id
+    /// Add a consumable to the inventory
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="consumable">Consumable to be added</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<IPlate> GetPlateAsync(Guid id, CancellationToken cancellationToken = default);
+    Task AddConsumableAsync(IConsumable consumable, CancellationToken cancellationToken = default);
     
     /// <summary>
-    /// Get a tip box by its id
+    /// Get a consumable by its id
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="consumableId">Id of the consumable</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<ITipBox> GetTipBoxAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<IConsumable> GetConsumableAsync(Guid consumableId, CancellationToken cancellationToken = default);
     
     //Task UpdateInventoryAsync(Guid id, CancellationToken cancellationToken = default);
+    
+    /// <summary>
+    /// Remove a consumable from the inventory
+    /// </summary>
+    /// <param name="consumableId">Id of the consumable to be removed</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task RemoveConsumableAsync(Guid consumableId, CancellationToken cancellationToken = default);
 }

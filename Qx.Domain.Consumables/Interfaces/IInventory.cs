@@ -1,14 +1,11 @@
+using Qx.Core;
+
 namespace Qx.Domain.Consumables.Interfaces;
 
-public interface IInventory
+public interface IInventory : IUniquelyIdentifiable
 {
-    IReadOnlyList<IPlate> Plates { get; }
-    IReadOnlyList<ITipBox> TipBoxes { get; }
-    
-    void AddPlate(IPlate plate);
-    void AddTipBox(ITipBox tipBox);
-    void RemovePlate(Guid plateId);
-    void RemoveTipBox(Guid tipBoxId);
-    IList<Guid> GetPlateIds();
-    IList<Guid> GetTipBoxIds();
+    IReadOnlyList<IConsumable> Consumables { get; }
+    void AddConsumable(IConsumable consumable);
+    //void UpdateConsumable(Guid id, IConsumable consumable);
+    void RemoveConsumable(Guid consumableId);
 }

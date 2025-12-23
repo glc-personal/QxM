@@ -8,7 +8,12 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.11">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.22" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
         <PackageReference Include="Serilog" Version="4.3.0" />
         <PackageReference Include="Serilog.Extensions.Hosting" Version="10.0.0" />
         <PackageReference Include="Serilog.Settings.Configuration" Version="10.0.0" />
@@ -19,6 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Qx.Application.Services\Qx.Application.Services.csproj" />
+      <ProjectReference Include="..\Qx.Infrastructure.Persistence\Qx.Infrastructure.Persistence.csproj" />
       <ProjectReference Include="..\Qx.Services.InstrumentOrchestrator\Qx.Services.InstrumentOrchestrator.csproj" />
       <ProjectReference Include="..\Qx.Services.InstrumentScheduler\Qx.Services.InstrumentScheduler.csproj" />
       <ProjectReference Include="..\Qx.Services.RunOrchestrator\Qx.Services.RunOrchestrator.csproj" />

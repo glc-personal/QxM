@@ -12,4 +12,22 @@
       <ProjectReference Include="..\Qx.Domain.Locations\Qx.Domain.Locations.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Factories\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Implementations\Plate.cs" />
+      <Compile Remove="Implementations\Tip.cs" />
+      <Compile Remove="Implementations\TipBox.cs" />
+      <Compile Remove="Implementations\TipColumn.cs" />
+      <Compile Remove="Implementations\Well.cs" />
+      <Compile Remove="Implementations\WellColumn.cs" />
+      <Compile Remove="Factories\PlateFactory.cs" />
+      <Compile Remove="Factories\TipBoxFactory.cs" />
+      <Compile Remove="Interfaces\IPlate.cs" />
+      <Compile Remove="Interfaces\ITip.cs" />
+      <Compile Remove="Interfaces\ITipBox.cs" />
+    </ItemGroup>
+
 </Project>

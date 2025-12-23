@@ -12,4 +12,8 @@
       <ProjectReference Include="..\Qx.Domain.Locations\Qx.Domain.Locations.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.1" />
+    </ItemGroup>
+
 </Project>

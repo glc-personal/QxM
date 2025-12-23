@@ -5,6 +5,7 @@ namespace Qx.Domain.Consumables.Interfaces;
 
 public interface IPlate : IConsumable
 {
+    // TODO: Could remove and add numberOfColumns and numberOfRows to match ITipBox
     /// <summary>
     /// Well columns
     /// </summary>
@@ -13,7 +14,7 @@ public interface IPlate : IConsumable
     /// <summary>
     /// Foil seal policy for the plate
     /// </summary>
-    FoilSealPolicy FoilSealPolicy { get; }
+    SealPolicy SealPolicy { get; }
     
     /// <summary>
     /// Add volume to the container to all wells in a particular column

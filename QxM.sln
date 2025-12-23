@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		compose.yaml = compose.yaml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QxM", "QxM\QxM.csproj", "{8870889C-B649-4ECC-AD4E-983567E1927F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Qx.Infrastructure", "Qx.Infrastructure", "{B986E6DC-4154-4653-A78A-1F74D6D02A4D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Qx.Domain", "Qx.Domain", "{9C671B4A-4007-4DDC-B613-03C314C8FCAD}"
@@ -59,10 +57,6 @@ Global
 		{27A72AC9-CFBF-4872-B1A7-9A2B84F95276}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27A72AC9-CFBF-4872-B1A7-9A2B84F95276}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27A72AC9-CFBF-4872-B1A7-9A2B84F95276}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8870889C-B649-4ECC-AD4E-983567E1927F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8870889C-B649-4ECC-AD4E-983567E1927F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8870889C-B649-4ECC-AD4E-983567E1927F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8870889C-B649-4ECC-AD4E-983567E1927F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{334A4DBC-ADB3-468B-81D0-6F672DAAE8C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{334A4DBC-ADB3-468B-81D0-6F672DAAE8C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{334A4DBC-ADB3-468B-81D0-6F672DAAE8C0}.Release|Any CPU.ActiveCfg = Release|Any CPU

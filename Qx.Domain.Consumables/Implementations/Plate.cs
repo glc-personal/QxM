@@ -13,7 +13,7 @@ public sealed class Plate : IPlate
     private readonly FoilSeal _foilSeal;
 
     public Plate(string name, ReusePolicy reusePolicy, Location? location,
-        IReadOnlyList<WellColumn> wellColumns, FoilSealPolicy foilSealPolicy)
+        IReadOnlyList<WellColumn> wellColumns, SealPolicy sealPolicy)
     {
         UniqueIdentifier = Guid.NewGuid();
         Name = name;
@@ -23,8 +23,8 @@ public sealed class Plate : IPlate
         Uses = 0;
         Location = location;
         WellColumns = wellColumns;
-        FoilSealPolicy = foilSealPolicy;
-        if (FoilSealPolicy.IsFoilSealed)
+        SealPolicy = sealPolicy;
+        if (SealPolicy.IsFoilSealed)
             _foilSeal = new FoilSeal(WellColumns.Count);
     }
     
@@ -36,7 +36,7 @@ public sealed class Plate : IPlate
     public int Uses { get; }
     public Location Location { get; }
     public IReadOnlyList<WellColumn> WellColumns { get; }
-    public FoilSealPolicy FoilSealPolicy { get; }
+    public SealPolicy SealPolicy { get; }
 
     /// <inheritdoc />
     public void AddVolume(Volume[] volumes, int columnIndex)
@@ -55,7 +55,7 @@ public sealed class Plate : IPlate
     /// <inheritdoc />
     public void PierceFoilSeal(int columnIndex)
     {
-        if (FoilSealPolicy.IsFoilSealed)
+        if (SealPolicy.IsFoilSealed)
             _foilSeal.PierceWellColumnSeals(columnIndex);
     }
 
@@ -67,7 +67,7 @@ public sealed class Plate : IPlate
 
     private void CheckFoilSeal(int columnIndex, string operation)
     {
-        if (FoilSealPolicy.IsFoilSealed && _foilSeal.IsWellColumnSealed(columnIndex)) 
+        if (SealPolicy.IsFoilSealed && _foilSeal.IsWellColumnSealed(columnIndex)) 
             throw new PlateFoilSealException(this, operation, columnIndex);
     }
 

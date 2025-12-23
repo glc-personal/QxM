@@ -8,12 +8,22 @@ namespace Qx.Application.Services.Dtos;
 public sealed class InventoryDto
 {
     /// <summary>
+    /// Unique identifier for the inventory
+    /// </summary>
+    public Guid Id { get; init; }
+    
+    /// <summary>
     /// Time the inventory was captured at
     /// </summary>
     public DateTime CapturedAt { get; init; } = DateTime.UtcNow;
     
-    // Consumables present
-    // TODO: Cartridges, Lids
-    public IReadOnlyList<IPlate> Plates { get; init; } = new List<IPlate>();
-    public IReadOnlyList<ITipBox> TipBoxes { get; init; } = new List<ITipBox>();
+    /// <summary>
+    /// Time the inventory was updated at
+    /// </summary>
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    
+    /// <summary>
+    /// List of consumables in the inventory
+    /// </summary>
+    public IReadOnlyList<IConsumable> Consumables { get; init; } = new List<IConsumable>();
 }
