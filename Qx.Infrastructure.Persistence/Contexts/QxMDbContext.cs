@@ -26,6 +26,7 @@ public class QxMDbContext : DbContext
         ConfigureConsumable(modelBuilder);
         ConfigureConsumableColumn(modelBuilder);
         ConfigureLocation(modelBuilder);
+        ConfigureConsumableType(modelBuilder);
     }
 
     private static void ConfigureInventory(ModelBuilder modelBuilder)
@@ -72,6 +73,8 @@ public class QxMDbContext : DbContext
         entity.Property(e => e.IsReusable)
             .IsRequired();
         entity.Property(e => e.MaxUses);
+        entity.Property(e => e.IsSealed)
+            .IsRequired();
         entity.Property(e => e.Barcode)
             .HasMaxLength(200);
         
@@ -162,6 +165,8 @@ public class QxMDbContext : DbContext
         entity.Property(e => e.Frame)
             .IsRequired()
             .HasMaxLength(50);
+        entity.Property(e => e.IsCustom)
+            .IsRequired();
         
         // Optimized indexing
         entity.HasIndex(e => e.Name) // locations by name (locations have unique names)
@@ -204,6 +209,8 @@ public class QxMDbContext : DbContext
         entity.Property(e => e.DefaultIsReusable)
             .IsRequired();
         entity.Property(e => e.DefaultMaxUses);
+        entity.Property(e => e.DefaultIsReusable)
+            .IsRequired();
         
         // Optimized indexing
         entity.HasIndex(e => e.Name)

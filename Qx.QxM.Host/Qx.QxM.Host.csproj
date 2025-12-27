@@ -33,7 +33,8 @@
 
     <ItemGroup>
       <Folder Include="Configuration\" />
-      <Folder Include="Dtos\" />
+      <Folder Include="Requests\" />
+      <Folder Include="Responses\" />
     </ItemGroup>
 
 </Project>

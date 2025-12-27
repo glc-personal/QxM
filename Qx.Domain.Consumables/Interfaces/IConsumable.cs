@@ -1,6 +1,7 @@
 using Qx.Core;
 using Qx.Domain.Consumables.Enums;
 using Qx.Domain.Consumables.Implementations;
+using Qx.Domain.Locations.Enums;
 using Qx.Domain.Locations.Implementations;
 
 namespace Qx.Domain.Consumables.Interfaces;
@@ -10,13 +11,12 @@ namespace Qx.Domain.Consumables.Interfaces;
 /// </summary>
 public interface IConsumable : INameable, IUniquelyIdentifiable
 {
-    ConsumableTypes Type { get; }
+    ConsumableType Type { get; }
     ConsumableStates State { get; }
     ReusePolicy ReusePolicy { get; }
     int Uses { get; }
+    SealPolicy SealPolicy { get; }
     Location Location { get; }
-    int NumberOfColumns { get; }
-    int NumberOfRows { get; }
     IList<ConsumableColumn> Columns { get; }
     void OverrideUses(int value);
     void OverrideState(ConsumableStates value);

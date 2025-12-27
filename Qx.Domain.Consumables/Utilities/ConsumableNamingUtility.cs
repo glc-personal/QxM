@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Qx.Domain.Consumables.Exceptions;
 using Qx.Domain.Locations.Enums;
 
@@ -14,61 +13,40 @@ public static class ConsumableNamingUtility
     /// <summary>
     /// Create a consumable name
     /// </summary>
-    /// <param name="deckSlotName">Deck slot name</param>
+    /// <param name="slotName">Deck slot name</param>
     /// <param name="batch">Batch name</param>
     /// <param name="columnIndex">Column index</param>
     /// <returns></returns>
-    public static string CreateConsumableName(DeckSlotNames deckSlotName, BatchNames batch, int columnIndex)
+    public static string CreateConsumableName(SlotName slotName, BatchNames batch, int? columnIndex)
     {
+        if (columnIndex == null && batch == BatchNames.None)
+            return slotName.ToString();
+        if (columnIndex == null)
+            return CreateConsumableName(slotName, batch);
         if (batch == BatchNames.None)
-            return CreateConsumableName(deckSlotName, columnIndex);
-        return $"{deckSlotName}-{batch}-{CreateColumnName(columnIndex)}";
+            return CreateConsumableName(slotName, columnIndex.Value);
+        return $"{slotName}-{batch}-{CreateColumnName(columnIndex.Value)}";
     }
 
-    public static string CreateConsumableName(DeckSlotNames deckSlotName, BatchNames batch)
+    public static string CreateConsumableName(SlotName slotName, BatchNames batch)
     {
         if (batch == BatchNames.None)
         {
             BatchNames[] validBatches = [BatchNames.A, BatchNames.B, BatchNames.C, BatchNames.D];
             throw new ArgumentException($"Invalid batch name ({batch}), must be from {validBatches.ToString()}");
         }
-        return $"{deckSlotName}-{batch}";
+        return $"{slotName}-{batch}";
     }
 
     /// <summary>
     /// Create a consumable name
     /// </summary>
-    /// <param name="deckSlotName">Deck slot name</param>
+    /// <param name="slotName">Deck slot name</param>
     /// <param name="columnIndex">Column index</param>
     /// <returns></returns>
-    public static string CreateConsumableName(DeckSlotNames deckSlotName, int columnIndex)
+    public static string CreateConsumableName(SlotName slotName, int columnIndex)
     {
-        return $"{deckSlotName}-{CreateColumnName(columnIndex)}";
-    }
-
-    /// <summary>
-    /// Create a consumable name
-    /// </summary>
-    /// <param name="readerSlotName">Reader slot name</param>
-    /// <param name="batch">Batch name</param>
-    /// <param name="columnIndex">Column index</param>
-    /// <returns></returns>
-    public static string CreateConsumableName(ReaderSlotNames readerSlotName, BatchNames batch, int columnIndex)
-    {
-        if (batch == BatchNames.None)
-            return CreateConsumableName(readerSlotName, columnIndex);
-        return $"{readerSlotName}-{batch}-{CreateColumnName(columnIndex)}";
-    }
-
-    /// <summary>
-    /// Create a consumable name
-    /// </summary>
-    /// <param name="readerSlotName">Reader slot name</param>
-    /// <param name="columnIndex">Column index</param>
-    /// <returns></returns>
-    public static string CreateConsumableName(ReaderSlotNames readerSlotName, int columnIndex)
-    {
-        return $"{readerSlotName}-{CreateColumnName(columnIndex)}";
+        return $"{slotName}-{CreateColumnName(columnIndex)}";
     }
 
     /// <summary>
@@ -81,7 +59,7 @@ public static class ConsumableNamingUtility
         return $"Column{columnIndex+1}";
     }
 
-    public static DeckSlotNames GetDeckSlotNameFromConsumableName(string consumableName)
+    public static SlotName GetDeckSlotNameFromConsumableName(string consumableName)
     {
         var nameArray = consumableName.Split('-');
         if (nameArray.Length < 2)
@@ -89,7 +67,7 @@ public static class ConsumableNamingUtility
         var deckSlotName = nameArray[new Range(0, nameArray.Length - 2)];
         if (deckSlotName.Length > 1)
             throw new ConsumableNameFormatException(consumableName);
-        return (DeckSlotNames)Enum.Parse(typeof(DeckSlotNames), deckSlotName[0]);
+        return (SlotName)Enum.Parse(typeof(SlotName), deckSlotName[0]);
     }
 
     public static BatchNames GetBatchNameFromConsumableName(string consumableName)
@@ -130,7 +108,7 @@ public static class ConsumableNamingUtility
 
     private static bool IsDeckSlotName(string value)
     {
-        var validNames = Enum.GetValues(typeof(DeckSlotNames)).Cast<string>();
+        var validNames = Enum.GetValues(typeof(SlotName)).Cast<string>();
         return validNames.Contains(value);
     }
 

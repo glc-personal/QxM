@@ -1,4 +1,7 @@
 using Qx.Domain.Consumables.Interfaces;
+using Qx.Domain.Locations.Enums;
+using Qx.Domain.Locations.Exceptions;
+using Qx.Domain.Locations.Implementations;
 using Qx.Infrastructure.Persistence.Entities;
 
 namespace Qx.Infrastructure.Persistence.Utilities;
@@ -27,7 +30,7 @@ public static class EntityMappingUtility
         var entity = new ConsumableTypeEntity
         {
             Id = consumableType.UniqueIdentifier.ToString(),
-            Name = consumableType.Name,
+            Name = consumableType.Type.ToString(),
             Version = consumableType.Version.ToString(),
             RowCount = consumableType.Geometry.RowCount,
             ColumnCount = consumableType.Geometry.ColumnCount,
@@ -40,6 +43,23 @@ public static class EntityMappingUtility
             HeightOffDeckMm = consumableType.Geometry.HeightOffDeckMm,
             DefaultIsReusable = consumableType.DefaultIsReusable,
             DefaultMaxUses = consumableType.DefaultMaxUses
+        };
+        return entity;
+    }
+
+    public static LocationEntity MapToEntity(Location domainLocation)
+    {
+        if (domainLocation.Position.GetType() != typeof(CoordinatePosition))
+            throw new LocationPositionTypeException(domainLocation.Position.GetType());
+        var position = (CoordinatePosition)domainLocation.Position;
+        var entity = new LocationEntity
+        {
+            Id = domainLocation.UniqueIdentifier,
+            Name = domainLocation.Name,
+            Frame = domainLocation.Frame.ToString(),
+            XUs = position.X,
+            YUs = position.Y,
+            ZUs = position.Z,
         };
         return entity;
     }

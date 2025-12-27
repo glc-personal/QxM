@@ -1,5 +1,8 @@
+using System.Drawing;
 using Qx.Application.Services.Dtos;
 using Qx.Domain.Consumables.Interfaces;
+using Qx.Domain.Locations.Exceptions;
+using Qx.Domain.Locations.Implementations;
 
 namespace Qx.Application.Services.Utilities;
 
@@ -15,7 +18,7 @@ public static class DtoMappingUtility
         var dto = new ConsumableTypeDto
         {
             Id = consumableType.UniqueIdentifier,
-            Name = consumableType.Name,
+            Type = consumableType.Type,
             Version = consumableType.Version.ToString(),
             RowCount = consumableType.Geometry.RowCount,
             ColumnCount = consumableType.Geometry.ColumnCount,
@@ -29,6 +32,30 @@ public static class DtoMappingUtility
             DefaultIsReusable = consumableType.DefaultIsReusable,
             DefaultMaxUses = consumableType.DefaultMaxUses
         };
+        return dto;
+    }
+
+    /// <summary>
+    /// Map domain location to a location data type object
+    /// </summary>
+    /// <param name="location"></param>
+    /// <returns></returns>
+    /// <exception cref="LocationPositionTypeException"></exception>
+    public static LocationDto MapToDto(Location location)
+    {
+        if (location.Position.GetType() != typeof(CoordinatePosition))
+            throw new LocationPositionTypeException(location.Position.GetType());
+        var position = (CoordinatePosition)location.Position;
+        var dto = new LocationDto
+        {
+            Id = location.UniqueIdentifier,
+            Name = location.Name,
+            XUs = position.X,
+            YUs = position.Y,
+            ZUs = position.Z,
+            Frame = location.Frame.ToString(),
+        };
+        
         return dto;
     }
 }

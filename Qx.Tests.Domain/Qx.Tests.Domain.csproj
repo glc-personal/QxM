@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Qx.Domain.Consumables\Qx.Domain.Consumables.csproj" />
+      <ProjectReference Include="..\Qx.Domain.Labware\Qx.Domain.Labware.csproj" />
       <ProjectReference Include="..\Qx.Domain.Liquids\Qx.Domain.Liquids.csproj" />
     </ItemGroup>
 

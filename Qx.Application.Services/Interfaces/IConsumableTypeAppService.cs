@@ -1,4 +1,5 @@
 using Qx.Application.Services.Dtos;
+using Qx.Domain.Consumables.Enums;
 
 namespace Qx.Application.Services.Interfaces;
 
@@ -9,7 +10,15 @@ public interface IConsumableTypeAppService
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<IList<ConsumableTypeDto>> GetConsumableTypesAsync(CancellationToken cancellationToken = default);
+    Task<IList<ConsumableTypeDto>> GetConsumableTypesAsync(ConsumableTypes? type, CancellationToken cancellationToken = default);
+    
+    /// <summary>
+    /// Get the consumable type by id
+    /// </summary>
+    /// <param name="typeId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<ConsumableTypeDto> GetConsumableTypeByIdAsync(Guid typeId, CancellationToken cancellationToken = default);
     
     /// <summary>
     /// Add a consumable

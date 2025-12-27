@@ -1,3 +1,5 @@
+using Qx.Domain.Consumables.Enums;
+
 namespace Qx.Application.Services.Dtos;
 
 /// <summary>
@@ -13,7 +15,7 @@ public sealed class ConsumableTypeDto
     /// <summary>
     /// Name of the consumable type (mapped to the Qx.Domain.Consumables.Enums.ConsumableTypes)
     /// </summary>
-    public string Name { get; init; }
+    public ConsumableTypes Type { get; init; }
     
     /// <summary>
     /// Consumable version string

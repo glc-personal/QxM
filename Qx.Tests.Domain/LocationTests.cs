@@ -26,12 +26,12 @@ public class LocationTests
         
         // ensure the deck slot util can get the coordinate position of the deck slot
         var expectedCoordPos = new CoordinatePosition(150000, 300000, 20000, CoordinatePositionUnits.Microsteps);
-        var deckSlotPos = new DeckSlotPosition(DeckSlotNames.TipBox, BatchNames.A);
+        var deckSlotPos = new DeckSlotPosition(SlotName.TipBox, BatchNames.A);
         var actualCoordPos = _deckSlotUtility.GetCoordinatePosition(deckSlotPos);
         Assert.AreEqual(actualCoordPos, expectedCoordPos);
         
         // ensure invalid configurations are caught for a missing key
-        var badKeyPosition = new DeckSlotPosition(DeckSlotNames.TipBox, BatchNames.B);
+        var badKeyPosition = new DeckSlotPosition(SlotName.TipBox, BatchNames.B);
         Assert.Catch<ConfigurationKeyNotFoundException>(() => _deckSlotUtility.GetCoordinatePosition(badKeyPosition));
     }
 
@@ -39,14 +39,14 @@ public class LocationTests
     public void LocationUseTests()
     {
         // Create a location not in the config but based off it (include the column)
-        var deckSlotName = DeckSlotNames.TipBox;
+        var deckSlotName = SlotName.TipBox;
         var batch = BatchNames.A;
         var columnIndex = 1; 
         var locationName = deckSlotName + "-" + batch + $"-Column{columnIndex}";
         var deckSlotPos = new DeckSlotPosition(deckSlotName, batch);
         // look up the configured pos of the deck slot pos
         var pos = _deckSlotUtility.GetCoordinatePosition(deckSlotPos);
-        var location = new Location(locationName, pos);
+        var location = new Location(Guid.NewGuid(), locationName, pos, CoordinateFrame.Deck, true);
         Assert.Pass();
     }
 
@@ -54,7 +54,7 @@ public class LocationTests
     {
         // create a sample deck slot json object to configure the deck slot utility
         var jsonObject = TestHelperUtility.CreateDeckSlotConfigObject(
-            DeckSlotNames.TipBox, BatchNames.A, 
+            SlotName.TipBox, BatchNames.A, 
             new CoordinatePosition(150000, 300000, 20000, CoordinatePositionUnits.Microsteps)
             );
         

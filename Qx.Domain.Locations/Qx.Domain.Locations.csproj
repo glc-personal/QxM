@@ -12,8 +12,4 @@
       <ProjectReference Include="..\Qx.Core\Qx.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Interfaces\" />
-    </ItemGroup>
-
 </Project>

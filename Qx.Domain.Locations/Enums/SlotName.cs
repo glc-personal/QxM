@@ -1,6 +1,6 @@
 namespace Qx.Domain.Locations.Enums;
 
-public enum DeckSlotNames
+public enum SlotName
 {
     DnaQuantStrip,
     TipBox,
@@ -15,4 +15,6 @@ public enum DeckSlotNames
     LidStack,
     CartridgeStack,
     SamplePrepStrip,
+    Tray,
+    Heater, // doubles with heater clamp position (reader frame) and imaging (imager frame)
 }

@@ -27,7 +27,7 @@ public class ConsumablesTest
         // ensure attempting to create a consumable name with a deck slot and batch fails if batch is set to none
         Assert.Catch<ArgumentException>(() =>
         {
-            var name = ConsumableNamingUtility.CreateConsumableName(DeckSlotNames.TipBox, BatchNames.None);
+            var name = ConsumableNamingUtility.CreateConsumableName(SlotName.TipBox, BatchNames.None);
         });
     }
 }

@@ -6,7 +6,7 @@ namespace Qx.Tests.Domain.Utilities;
 
 public static class TestHelperUtility
 {
-    public static JsonObject CreateDeckSlotConfigObject(DeckSlotNames name, BatchNames batch, CoordinatePosition pos)
+    public static JsonObject CreateDeckSlotConfigObject(SlotName name, BatchNames batch, CoordinatePosition pos)
     {
         JsonObject jsonObject = new JsonObject
         {

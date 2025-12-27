@@ -7,12 +7,12 @@ namespace Qx.Domain.Locations.Implementations;
 /// </summary>
 public sealed record DeckSlotPosition : Position
 {
-    public DeckSlotPosition(DeckSlotNames name, BatchNames batch)
+    public DeckSlotPosition(SlotName name, BatchNames batch)
     {
         Name = name;
         Batch = batch;
     }
     
-    public DeckSlotNames Name { get; }
+    public SlotName Name { get; }
     public BatchNames Batch { get; }
 }

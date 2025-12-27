@@ -4,6 +4,8 @@ using Qx.Domain.Consumables.Interfaces;
 using Qx.Domain.Consumables.Records;
 using Qx.Domain.Consumables.Utilities;
 using Qx.Domain.Liquids.Enums;
+using Qx.Domain.Locations.Enums;
+using Qx.Domain.Locations.Implementations;
 using Qx.Infrastructure.Persistence.Entities;
 using Version = Qx.Core.Version;
 
@@ -22,25 +24,44 @@ public static class DomainMappingUtility
     public static IConsumable MapToDomain(ConsumableEntity entity)
     {
         var name = entity.Name;
-        var deckSlotName = ConsumableNamingUtility.GetDeckSlotNameFromConsumableName(name);
+        var slotName = ConsumableNamingUtility.GetDeckSlotNameFromConsumableName(name);
         var batchName = ConsumableNamingUtility.GetBatchNameFromConsumableName(name);
-
-        return new Consumable(deckSlotName, batchName, ConsumableTypes.TipBox, 
-            0,0,
-            new ReusePolicy(true), 
-            new SealPolicy(false));
+        var domainConsumableType = (ConsumableType)DomainMappingUtility.MapToDomain(entity.Type);
+        var domainLocation = MapToDomain(entity.Location);
+        return new Consumable(slotName, batchName, 
+            domainConsumableType, domainLocation, 
+            new ReusePolicy(entity.IsReusable, entity.MaxUses), 
+            new SealPolicy(entity.IsSealed));
     }
 
     public static IConsumableType MapToDomain(ConsumableTypeEntity entity)
     {
         var name = (ConsumableTypes)Enum.Parse(typeof(ConsumableTypes), entity.Name);
         var version = Version.Parse(entity.Version);
-        var geometry = new ConsumableGeometry(entity.ColumnCount, entity.RowCount,
-            entity.ColumnOffsetMm, entity.RowOffsetMm, 
-            entity.LengthMm, entity.WidthMm, entity.HeightMm,
-            entity.FirstColumnOffsetMm, entity.HeightOffDeckMm);
+        var geometry = new ConsumableGeometry
+        {
+            ColumnCount = entity.ColumnCount,
+            RowCount = entity.RowCount,
+            ColumnOffsetMm = entity.ColumnOffsetMm,
+            RowOffsetMm = entity.RowOffsetMm,
+            LengthMm = entity.LengthMm,
+            WidthMm = entity.WidthMm,
+            HeightMm = entity.HeightMm,
+            FirstColumnOffsetMm = entity.FirstColumnOffsetMm,
+            HeightOffDeckMm = entity.HeightOffDeckMm,
+        };
         
         return new ConsumableType(name, geometry, version, entity.DefaultIsReusable, entity.DefaultMaxUses);
+    }
+
+    public static Location MapToDomain(LocationEntity entity)
+    {
+        var id = entity.Id;
+        var name = entity.Name;
+        var position = new CoordinatePosition(entity.XUs, entity.YUs, entity.ZUs, CoordinatePositionUnits.Microsteps);
+        var frame = (CoordinateFrame)Enum.Parse(typeof(CoordinateFrame), entity.Frame);
+        var isCustom = entity.IsCustom;
+        return new Location(id, name, position, frame, isCustom);
     }
 
     private static ConsumableColumn MapToDomain(ConsumableColumnEntity entity)

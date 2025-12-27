@@ -25,28 +25,25 @@ public class ConsumableTypeRepository : IConsumableTypeRepository
         return Task.FromResult<IList<IConsumableType>>(consumableTypes);
     }
 
-    public Task AddConsumableTypeAsync(IConsumableType consumableType, CancellationToken cancellationToken = default)
+    public async Task AddConsumableTypeAsync(IConsumableType consumableType, CancellationToken cancellationToken = default)
     {
         var consumableTypeEntity = EntityMappingUtility.MapToEntity(consumableType);
         _context.ConsumableType.Add(consumableTypeEntity);
-        _context.SaveChanges();
-        return Task.CompletedTask;
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public Task RemoveConsumableTypeAsync(Guid consumableTypeId, CancellationToken cancellationToken = default)
+    public async Task RemoveConsumableTypeAsync(Guid consumableTypeId, CancellationToken cancellationToken = default)
     {
         var entity = _context.ConsumableType.FirstOrDefault(e => e.Id == consumableTypeId.ToString());
         if (entity == null) throw new KeyNotFoundException($"Consumable type with id {consumableTypeId} not found");
         _context.ConsumableType.Remove(entity);
-        _context.SaveChanges();
-        return Task.CompletedTask;
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public Task UpdateConsumableTypeAsync(IConsumableType consumableType, CancellationToken cancellationToken = default)
+    public async Task UpdateConsumableTypeAsync(IConsumableType consumableType, CancellationToken cancellationToken = default)
     {
         var consumableTypeEntity = EntityMappingUtility.MapToEntity(consumableType);
         _context.ConsumableType.Update(consumableTypeEntity);
-        _context.SaveChanges();
-        return Task.CompletedTask;
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

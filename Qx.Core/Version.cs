@@ -1,10 +1,16 @@
+using Swashbuckle.AspNetCore.Annotations;
+
 namespace Qx.Core;
 
-public struct Version
+public sealed class Version
 {
+    [SwaggerSchema(Description = "Major version number")]
     public int Major { get; set; }
+    [SwaggerSchema(Description = "Minor version number")]
     public int Minor { get; set; }
+    [SwaggerSchema(Description = "Build number for this {major}.{minor} version")]
     public int Build { get; set; }
+    [SwaggerSchema(Description = "Revision number for this build")]
     public int Revision { get; set; }
 
     public override string ToString()

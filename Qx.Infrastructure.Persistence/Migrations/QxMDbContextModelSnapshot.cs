@@ -80,6 +80,9 @@ namespace Qx.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsReusable")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsSealed")
+                        .HasColumnType("boolean");
+
                     b.Property<Guid>("LocationId")
                         .HasColumnType("uuid");
 
@@ -132,6 +135,9 @@ namespace Qx.Infrastructure.Persistence.Migrations
                     b.Property<bool>("DefaultIsReusable")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("DefaultIsSealed")
+                        .HasColumnType("boolean");
+
                     b.Property<int?>("DefaultMaxUses")
                         .HasColumnType("integer");
 
@@ -149,7 +155,8 @@ namespace Qx.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<int>("RowCount")
                         .HasColumnType("integer");
@@ -159,14 +166,21 @@ namespace Qx.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<double>("WidthMm")
                         .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ConsumableType");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("Name", "Version")
+                        .IsUnique();
+
+                    b.ToTable("consumable_type", (string)null);
                 });
 
             modelBuilder.Entity("Qx.Infrastructure.Persistence.Entities.InventoryEntity", b =>
@@ -202,6 +216,9 @@ namespace Qx.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
+
+                    b.Property<bool>("IsCustom")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()

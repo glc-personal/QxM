@@ -20,4 +20,7 @@ public class ConsumableTypeEntity
     // Default reuse policy (can be overwritten per instance if needed)
     public bool DefaultIsReusable { get; set; }
     public int? DefaultMaxUses { get; set; }
+    
+    // Default sealed policy (can be overwritten per instance if needed)
+    public bool DefaultIsSealed { get; set; }
 }

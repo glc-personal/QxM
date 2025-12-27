@@ -4,8 +4,8 @@ namespace Qx.Infrastructure.Persistence.Entities;
 public class LocationEntity
 {
     public Guid Id { get; set; } // PK
-
     public string Name { get; set; } = null!;
+    public bool IsCustom { get; set; }
     
     // Physical coordinates in a defined frame
     public double XUs { get; set; }

@@ -6,7 +6,7 @@ namespace Qx.Domain.Locations.Implementations;
 /// Deck slot config model for validating the expected structure of a deck slot config
 /// </summary>
 public sealed class DeckSlotConfigModel 
-    : Dictionary<DeckSlotNames, Dictionary<BatchNames, CoordinatePosition>>
+    : Dictionary<SlotName, Dictionary<BatchNames, CoordinatePosition>>
 {
     
 }

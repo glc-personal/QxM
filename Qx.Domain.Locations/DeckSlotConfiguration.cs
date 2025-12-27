@@ -14,9 +14,9 @@ public class DeckSlotConfiguration : IConfiguration<DeckSlotConfigModel, Enum>
     
     public void GetValue(List<Enum> keys, ref object? value)
     {
-        if (!Model.ContainsKey((DeckSlotNames)keys[0]))
+        if (!Model.ContainsKey((SlotName)keys[0]))
             throw new ConfigurationKeyNotFoundException(nameof(DeckSlotConfiguration), keys[0].ToString());
-        var batch = Model[(DeckSlotNames)keys[0]];
+        var batch = Model[(SlotName)keys[0]];
         if (!batch.ContainsKey((BatchNames)keys[1]))
             throw new ConfigurationKeyNotFoundException(nameof(DeckSlotConfiguration), keys[1].ToString());
         var pos = batch[(BatchNames)keys[1]];

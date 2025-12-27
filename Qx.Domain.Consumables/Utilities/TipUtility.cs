@@ -8,14 +8,14 @@ namespace Qx.Domain.Consumables.Utilities;
 
 public static class TipUtility
 {
-    public static readonly List<ConsumableTypes> ValidTipTypes =
+    public static readonly List<TipTypes> ValidTipTypes =
     [
-        ConsumableTypes.Tip1000Ul,
-        ConsumableTypes.Tip200Ul,
-        ConsumableTypes.Tip50Ul
+        TipTypes.Tip1000Ul,
+        TipTypes.Tip200Ul,
+        TipTypes.Tip50Ul
     ];
     
-    public static ConsumableTypes GetConsumableTypeFromTipCapacity(VolumeContainerCapacity capacity)
+    public static TipTypes GetConsumableTypeFromTipCapacity(VolumeContainerCapacity capacity)
     {
         // convert the capacity volume to Ul
         var capacityVolumeUl = capacity.Maximum.ToUnits(VolumeUnits.Ul);

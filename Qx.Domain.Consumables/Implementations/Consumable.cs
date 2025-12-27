@@ -12,31 +12,28 @@ public class Consumable : IConsumable
     private int _uses;
     private IList<ConsumableColumn> _columns;
 
-    public Consumable(DeckSlotNames deckSlot, BatchNames batch, ConsumableTypes type,
-        int numberOfColumns, int numberOfRows, 
+    public Consumable(SlotName slot, BatchNames batch, ConsumableType type, Location location, 
         ReusePolicy reusePolicy, SealPolicy sealPolicy)
     {
-        Name = ConsumableNamingUtility.CreateConsumableName(deckSlot, batch);
+        Name = ConsumableNamingUtility.CreateConsumableName(slot, batch);
         UniqueIdentifier = Guid.NewGuid();
         Type = type;
         _state = ConsumableStates.Available;
         ReusePolicy = reusePolicy;
         _uses = 0;
-        Location = new Location(Name, new DeckSlotPosition(deckSlot, batch));
-        NumberOfColumns = numberOfColumns;
-        NumberOfRows = numberOfRows;
-        _columns = new List<ConsumableColumn>(numberOfColumns);
+        Location = location;
+        _columns = new List<ConsumableColumn>(type.Geometry.ColumnCount);
+        SealPolicy = sealPolicy;
     }
     
     public string Name { get; }
     public Guid UniqueIdentifier { get; }
-    public ConsumableTypes Type { get; }
+    public ConsumableType Type { get; }
     public ConsumableStates State => _state;
     public ReusePolicy ReusePolicy { get; }
     public int Uses => _uses;
+    public SealPolicy SealPolicy { get; }
     public Location Location { get; }
-    public int NumberOfColumns { get; }
-    public int NumberOfRows { get; }
     public IList<ConsumableColumn> Columns => _columns;
     
     public void OverrideUses(int value)

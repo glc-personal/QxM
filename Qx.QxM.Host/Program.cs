@@ -1,7 +1,9 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Qx.Application.Services.Implementations;
 using Qx.Application.Services.Interfaces;
 using Qx.Domain.Consumables.Interfaces;
+using Qx.Domain.Locations.Interfaces;
 using Qx.Infrastructure.Persistence.Contexts;
 using Qx.Infrastructure.Persistence.Repositories;
 using Serilog;
@@ -29,6 +31,8 @@ builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IInventoryAppService, InventoryAppService>();
 builder.Services.AddScoped<IConsumableTypeRepository, ConsumableTypeRepository>();
 builder.Services.AddScoped<IConsumableTypeAppService, ConsumableTypeAppService>();
+builder.Services.AddScoped<ILocationRepository, LocationsRepository>();
+builder.Services.AddScoped<ILocationAppService, LocationAppService>();
 #endregion
 // singleton services: 
 #region SingletonServices
@@ -41,7 +45,14 @@ builder.Services.AddDbContext<QxMDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("QxMDb"));
 });
 #endregion
-builder.Services.AddControllers();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 

@@ -9,13 +9,13 @@ public class InvalidTipCapacityException(VolumeContainerCapacity capacity)
 {
     private static string GetValidTips()
     {
-        return string.Join(", ", TipUtility.ValidTipTypes.Select(CleanUpConsumableName));
+        return string.Join(", ", TipUtility.ValidTipTypes.Select(GrabTipTypesCapacityAsString));
     }
 
-    private static string CleanUpConsumableName(ConsumableTypes consumableType)
+    private static string GrabTipTypesCapacityAsString(TipTypes tipType)
     {
-        if (!TipUtility.ValidTipTypes.Contains(consumableType))
-            throw new ArgumentException($"Invalid consumable type ({consumableType}) when checking for valid tip capacity");
-        return consumableType.ToString().Replace("Tip", "");
+        if (!TipUtility.ValidTipTypes.Contains(tipType))
+            throw new ArgumentException($"Invalid {nameof(TipTypes)} ({tipType}) when checking for valid tip capacity");
+        return tipType.ToString().Replace("Tip", "");
     }
 }
