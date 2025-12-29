@@ -42,7 +42,7 @@ public sealed class ConsumableTypeAppService : IConsumableTypeAppService
     public async Task<ConsumableTypeDto> GetConsumableTypeByIdAsync(Guid typeId, CancellationToken cancellationToken = default)
     {
         var domainTypes = await _repo.GetConsumableTypesAsync(cancellationToken);
-        var domainType = domainTypes.FirstOrDefault(t => t.UniqueIdentifier == typeId);
+        var domainType = domainTypes.FirstOrDefault(t => t.Id == typeId);
         if (domainType == null) throw new KeyNotFoundException($"Consumable type with id {typeId} not found.");
         var consumableTypeDto = DtoMappingUtility.MapToDto(domainType);
         return consumableTypeDto;

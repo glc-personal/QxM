@@ -7,8 +7,7 @@ namespace Qx.Domain.Labware.LabwareDefinitions;
 
 public sealed class LabwareDefinition : IUniquelyIdentifiable, INameable
 {
-    internal LabwareDefinition(Guid id, string name, LabwareKind kind, Version version,
-        LabwareGeometry geometry, ReusePolicy reusePolicy, SealPolicy sealPolicy,
+    internal LabwareDefinition(Guid id, string name, LabwareKind kind, Version version, LabwareGeometry geometry,
         TipContainerModel? tipModel, LiquidContainerModel? liquidContainerModel, DeviceRole? deviceRole)
     {
         Id = id;
@@ -16,8 +15,6 @@ public sealed class LabwareDefinition : IUniquelyIdentifiable, INameable
         Kind = kind;
         Version = version;
         Geometry = geometry;
-        ReusePolicy = reusePolicy;
-        SealPolicy = sealPolicy;
         TipModel = tipModel;
         LiquidContainerModel = liquidContainerModel;
         DeviceRole = deviceRole;
@@ -28,19 +25,16 @@ public sealed class LabwareDefinition : IUniquelyIdentifiable, INameable
     public LabwareKind Kind { get; init; }
     public Version Version { get; init; }
     public LabwareGeometry Geometry { get; init; }
-    public ReusePolicy ReusePolicy { get; init; }
-    public SealPolicy SealPolicy { get; init; }
     public TipContainerModel? TipModel { get; init; }
     public LiquidContainerModel? LiquidContainerModel { get; init; }
     public DeviceRole? DeviceRole { get; init; }
 
     /// <summary> Creates a Labware Definition </summary>
     public static LabwareDefinition Create(string name, LabwareKind kind, Version version, LabwareGeometry geometry, 
-        ReusePolicy reusePolicy, SealPolicy sealPolicy, TipContainerModel? tipModel, LiquidContainerModel? liquidContainerModel, 
-        DeviceRole? deviceRole, Guid? id = null)
+        TipContainerModel? tipModel, LiquidContainerModel? liquidContainerModel, DeviceRole? deviceRole, Guid? id = null)
     {
         EnforceDomainInvariants(name, kind, geometry, tipModel, liquidContainerModel, deviceRole);
-        return new LabwareDefinition(id ?? Guid.NewGuid(), name, kind, version, geometry, reusePolicy, sealPolicy, 
+        return new LabwareDefinition(id ?? Guid.NewGuid(), name, kind, version, geometry, 
             tipModel, liquidContainerModel, deviceRole);
     }
 

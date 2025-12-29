@@ -29,7 +29,7 @@ public static class EntityMappingUtility
     {
         var entity = new ConsumableTypeEntity
         {
-            Id = consumableType.UniqueIdentifier.ToString(),
+            Id = consumableType.Id.ToString(),
             Name = consumableType.Type.ToString(),
             Version = consumableType.Version.ToString(),
             RowCount = consumableType.Geometry.RowCount,
@@ -54,7 +54,7 @@ public static class EntityMappingUtility
         var position = (CoordinatePosition)domainLocation.Position;
         var entity = new LocationEntity
         {
-            Id = domainLocation.UniqueIdentifier,
+            Id = domainLocation.Id,
             Name = domainLocation.Name,
             Frame = domainLocation.Frame.ToString(),
             XUs = position.X,

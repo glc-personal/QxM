@@ -16,7 +16,7 @@ public class Consumable : IConsumable
         ReusePolicy reusePolicy, SealPolicy sealPolicy)
     {
         Name = ConsumableNamingUtility.CreateConsumableName(slot, batch);
-        UniqueIdentifier = Guid.NewGuid();
+        Id = Guid.NewGuid();
         Type = type;
         _state = ConsumableStates.Available;
         ReusePolicy = reusePolicy;
@@ -27,7 +27,7 @@ public class Consumable : IConsumable
     }
     
     public string Name { get; }
-    public Guid UniqueIdentifier { get; }
+    public Guid Id { get; }
     public ConsumableType Type { get; }
     public ConsumableStates State => _state;
     public ReusePolicy ReusePolicy { get; }
@@ -52,4 +52,5 @@ public class Consumable : IConsumable
         if (ReusePolicy.IsReusable && _uses < ReusePolicy.MaxUses.Value && value == ConsumableStates.Consumed)
             _uses = ReusePolicy.MaxUses.Value + 1;
     }
+
 }

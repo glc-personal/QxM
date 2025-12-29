@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Factories\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Qx.Core.Measurement\Qx.Core.Measurement.csproj" />
       <ProjectReference Include="..\Qx.Core\Qx.Core.csproj" />
       <ProjectReference Include="..\Qx.Domain.Liquids\Qx.Domain.Liquids.csproj" />

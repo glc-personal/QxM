@@ -9,11 +9,11 @@ public sealed class Inventory : IInventory
     public Inventory()
     {
         _consumables = new List<IConsumable>();
-        UniqueIdentifier = Guid.NewGuid();
+        Id = Guid.NewGuid();
     }
     
     public IReadOnlyList<IConsumable> Consumables => _consumables.AsReadOnly();
-    public Guid UniqueIdentifier { get; }
+    public Guid Id { get; }
     
     public void AddConsumable(IConsumable consumable)
     {
@@ -26,12 +26,12 @@ public sealed class Inventory : IInventory
     {
         if (!HasConsumableById(consumableId))
             throw new InvalidOperationException($"Consumable (id: {consumableId}) not in the inventory");
-        _consumables.Remove(_consumables.First(c => c.UniqueIdentifier == consumableId));
+        _consumables.Remove(_consumables.First(c => c.Id == consumableId));
     }
 
     private bool HasConsumableByName(IConsumable consumable) 
         => _consumables.Any(c => c.Name == consumable.Name);
 
     private bool HasConsumableById(Guid consumableId) 
-        => _consumables.Any(c => c.UniqueIdentifier == consumableId);
+        => _consumables.Any(c => c.Id == consumableId);
 }

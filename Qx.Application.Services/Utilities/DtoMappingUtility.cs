@@ -17,7 +17,7 @@ public static class DtoMappingUtility
     {
         var dto = new ConsumableTypeDto
         {
-            Id = consumableType.UniqueIdentifier,
+            Id = consumableType.Id,
             Type = consumableType.Type,
             Version = consumableType.Version.ToString(),
             RowCount = consumableType.Geometry.RowCount,
@@ -48,7 +48,7 @@ public static class DtoMappingUtility
         var position = (CoordinatePosition)location.Position;
         var dto = new LocationDto
         {
-            Id = location.UniqueIdentifier,
+            Id = location.Id,
             Name = location.Name,
             XUs = position.X,
             YUs = position.Y,

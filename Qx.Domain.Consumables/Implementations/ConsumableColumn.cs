@@ -21,14 +21,14 @@ public class ConsumableColumn : IVolumeContainer
         SealPolicy = sealPolicy;
         _isSealed = sealPolicy.IsSealed;
         _uses = 0;
-        UniqueIdentifier = Guid.NewGuid();
+        Id = Guid.NewGuid();
     }
 
     public ReusePolicy ReusePolicy { get; }
     public SealPolicy SealPolicy { get; }
     public IList<Volume> Volumes => _volumes;
     public IList<VolumeContainerCapacity> Capacities => _capacities;
-    public Guid UniqueIdentifier { get; }
+    public Guid Id { get; }
     
     public void AddVolume(IList<Volume> volumes)
     {

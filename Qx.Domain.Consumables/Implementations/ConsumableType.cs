@@ -12,7 +12,7 @@ public sealed class ConsumableType(
     int? defaultMaxUses = null)
     : IConsumableType
 {
-    public Guid UniqueIdentifier { get; } = Guid.NewGuid();
+    public Guid Id { get; } = Guid.NewGuid();
     public ConsumableTypes Type { get; } = consumableTypeEnum;
     public Version Version { get; } = version;
     public ConsumableGeometry Geometry { get; } = geometry;

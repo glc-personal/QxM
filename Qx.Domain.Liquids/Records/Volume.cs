@@ -3,9 +3,9 @@ using Qx.Domain.Liquids.Exceptions;
 
 namespace Qx.Domain.Liquids.Records;
 
-public readonly record struct Volume
+public record struct Volume
 {
-    public double Value { get; init; }
+    public double Value { get; private set; }
     public VolumeUnits Units { get; init; }
     
     public Volume(double value, VolumeUnits units)
@@ -15,6 +15,11 @@ public readonly record struct Volume
         
         if (value < 0)
             throw new InvalidVolumeException(this);
+    }
+
+    public void Zero()
+    {
+        Value = 0D;
     }
     
     public static Volume operator +(Volume left, Volume right)

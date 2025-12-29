@@ -12,7 +12,7 @@ public sealed record Location : INameable, IUniquelyIdentifiable
     
     public Location(Guid id, string name, CoordinatePosition position, CoordinateFrame frame, bool isCustom)
     {
-        UniqueIdentifier = id; 
+        Id = id; 
         Name = name; 
         Frame = frame;
         Position = position;
@@ -50,7 +50,7 @@ public sealed record Location : INameable, IUniquelyIdentifiable
         };
         var name =
             $"{Name}-{nameof(CoordinateAxes.X)}{_xAxisOffset.Value}-{nameof(CoordinateAxes.Y)}{_yAxisOffset.Value}-{nameof(CoordinateAxes.Z)}{_zAxisOffset.Value}";
-        return new Location(UniqueIdentifier, name, shiftedPosition, Frame, true);
+        return new Location(Id, name, shiftedPosition, Frame, true);
     }
 
     /// <summary>
@@ -60,7 +60,7 @@ public sealed record Location : INameable, IUniquelyIdentifiable
     /// <summary>
     /// Unique identifier
     /// </summary>
-    public Guid UniqueIdentifier { get; }
+    public Guid Id { get; }
     /// <summary>
     /// Location frame of reference for the location position
     /// </summary>
@@ -73,4 +73,5 @@ public sealed record Location : INameable, IUniquelyIdentifiable
     /// Coordinate position of the location (X, Y, Z, units)
     /// </summary>
     public CoordinatePosition Position { get; }
+
 }
