@@ -5,10 +5,10 @@ namespace Qx.Core.Measurement;
 /// <summary>
 /// Measurement value in millimeters
 /// </summary>
-public readonly record struct Millimeters
+public readonly record struct Mm
 {
     // ReSharper disable once MemberCanBePrivate.Global
-    public Millimeters(decimal value)
+    public Mm(decimal value)
     {
         EnsureNonNegative(value);
         Value = value;
@@ -20,20 +20,20 @@ public readonly record struct Millimeters
     public override string ToString()
         => $"{Value} mm";
     
-    public static Millimeters operator+(Millimeters a, Millimeters b)
-        => new Millimeters(a.Value + b.Value);
+    public static Mm operator+(Mm a, Mm b)
+        => new Mm(a.Value + b.Value);
     
-    public static Millimeters operator-(Millimeters a, Millimeters b)
-        => new Millimeters(a.Value - b.Value);
+    public static Mm operator-(Mm a, Mm b)
+        => new Mm(a.Value - b.Value);
 
-    public bool Equals(Millimeters other)
+    public bool Equals(Mm other)
     {
         return Value == other.Value;
     }
 
     public override int GetHashCode() => Value.GetHashCode();
 
-    public static Millimeters Zero => new(0);
+    public static Mm Zero => new(0);
     
     private static void EnsureNonNegative(decimal value)
     {

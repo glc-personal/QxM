@@ -11,3 +11,4 @@
 - Application: use-cases, orchestration, transactions, interfaces/ports (IInventoryRepository, IDeviceController)
 - Infrastructure: EF repositories, device drivers, implementations of ports
 - Definition has “models”; Instance has “state”
+- Use OPTIMISTIC CONCURRENCY when doing the EF database work

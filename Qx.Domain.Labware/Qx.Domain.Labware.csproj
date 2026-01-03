@@ -9,7 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Qx.Core.Measurement\Qx.Core.Measurement.csproj" />
       <ProjectReference Include="..\Qx.Core\Qx.Core.csproj" />
-      <ProjectReference Include="..\Qx.Domain.Liquids\Qx.Domain.Liquids.csproj" />
+      <ProjectReference Include="..\Qx.Domain.Liquids.Old\Qx.Domain.Liquids.Old.csproj" />
       <ProjectReference Include="..\Qx.Domain.Locations\Qx.Domain.Locations.csproj" />
     </ItemGroup>
 

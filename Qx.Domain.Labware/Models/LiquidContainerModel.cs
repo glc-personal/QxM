@@ -4,7 +4,7 @@ namespace Qx.Domain.Labware.Models;
 
 public sealed class LiquidContainerModel
 {
-    internal LiquidContainerModel(LabwareGrid grid, IReadOnlyList<WellColumnDefinition> columnDefinitions)
+    private LiquidContainerModel(LabwareGrid grid, IReadOnlyList<WellColumnDefinition> columnDefinitions)
     {
         RowCount = grid.RowCount;
         ColumnCount = grid.ColumnCount;

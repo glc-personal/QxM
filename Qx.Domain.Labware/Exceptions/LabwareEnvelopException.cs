@@ -9,9 +9,9 @@ public class LabwareEnvelopException(LabwareEnvelope labwareEnvelop)
 {
     private static string BuildExceptionMessage(LabwareEnvelope labwareEnvelop)
     {
-        var validLength = labwareEnvelop.LengthXMm.Equals(Millimeters.Zero);
-        var validWidth = labwareEnvelop.WidthYMm.Equals(Millimeters.Zero);
-        var validHeight = labwareEnvelop.HeightZMm.Equals(Millimeters.Zero);
+        var validLength = labwareEnvelop.LengthXMm.Equals(Mm.Zero);
+        var validWidth = labwareEnvelop.WidthYMm.Equals(Mm.Zero);
+        var validHeight = labwareEnvelop.HeightZMm.Equals(Mm.Zero);
 
         var messageBuild = new StringBuilder();
         messageBuild.Append("Invalid labware envelop dimensions: ");

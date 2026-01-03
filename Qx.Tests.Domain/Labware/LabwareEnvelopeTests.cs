@@ -23,10 +23,10 @@ public class LabwareEnvelopeTests
     public void LabwareEnvelope_Initialization_Test(decimal x, decimal y, decimal z)
     {
         // catch any dimensions that are 0 (less than zero are already caught by Millimeter and so won't be tested here)
-        var length = new Millimeters(x);
-        var width = new Millimeters(y);
-        var height = new Millimeters(z);
-        if (length.Equals(Millimeters.Zero) || width.Equals(Millimeters.Zero) || height.Equals(Millimeters.Zero))
+        var length = new Mm(x);
+        var width = new Mm(y);
+        var height = new Mm(z);
+        if (length.Equals(Mm.Zero) || width.Equals(Mm.Zero) || height.Equals(Mm.Zero))
         {
             Assert.Catch<LabwareEnvelopException>(() =>
             {

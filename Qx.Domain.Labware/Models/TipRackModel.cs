@@ -2,9 +2,9 @@ using Qx.Domain.Labware.LabwareDefinitions;
 
 namespace Qx.Domain.Labware.Models;
 
-public sealed class TipContainerModel
+public sealed class TipRackModel
 {
-    private TipContainerModel(LabwareGrid grid, IReadOnlyList<TipColumnDefinition> columnDefinitions)
+    private TipRackModel(LabwareGrid grid, IReadOnlyList<TipColumnDefinition> columnDefinitions)
     {
         RowCount = grid.RowCount;
         ColumnCount = grid.ColumnCount;
@@ -15,12 +15,12 @@ public sealed class TipContainerModel
     public int ColumnCount { get; }
     public IReadOnlyList<TipColumnDefinition> Columns { get; }
 
-    public static TipContainerModel Create(LabwareGrid grid, IReadOnlyList<TipColumnDefinition> columnDefinitions)
+    public static TipRackModel Create(LabwareGrid grid, IReadOnlyList<TipColumnDefinition> columnDefinitions)
     {
         ArgumentNullException.ThrowIfNull(grid);
         ArgumentNullException.ThrowIfNull(columnDefinitions);
         EnforceDomainInvariants(grid, columnDefinitions);
-        return new TipContainerModel(grid, columnDefinitions);
+        return new TipRackModel(grid, columnDefinitions);
     }
     
     // NOTE: allowing missing columns in the tip container model to model tip boxes with missing tip columns

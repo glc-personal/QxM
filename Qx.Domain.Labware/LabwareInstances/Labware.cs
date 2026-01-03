@@ -1,14 +1,13 @@
-using Qx.Core;
 using Qx.Domain.Labware.LabwareDefinitions;
 using Qx.Domain.Labware.States;
 
 namespace Qx.Domain.Labware.LabwareInstances;
 
-public abstract class Labware(LabwareDefinition definition, Guid? id = null) : IUniquelyIdentifiable
+public abstract class Labware(LabwareDefinition definition, LabwareId? id = null)
 {
     private LabwareLifecycleState _state = LabwareLifecycleState.Available;
 
-    public Guid Id { get; } = id ?? Guid.NewGuid();
+    public LabwareId Id { get; } = id ?? new LabwareId(Guid.NewGuid());
     public LabwareDefinitionReference DefinitionReference { get; } = new(definition.Id, definition.Version, definition.Name);
 
     #region LifecycleStateMachine
@@ -53,4 +52,17 @@ public abstract class Labware(LabwareDefinition definition, Guid? id = null) : I
         };
     }
     #endregion
+
+    protected void EnforceUseOnAvailability()
+    {
+        if (_state != LabwareLifecycleState.Available)
+            throw new InvalidOperationException($"Cannot use {nameof(Labware)} it is not available, it is currently {_state}");
+    }
+
+    protected void EnforceUnusableLifecycleState()
+    {
+        if (_state is LabwareLifecycleState.Unknown or LabwareLifecycleState.OutOfService 
+            or LabwareLifecycleState.Reserved or LabwareLifecycleState.InUse)
+            throw new InvalidOperationException($"Cannot use {nameof(Labware)} it is not available for use, it is currently {_state}");
+    }
 }

@@ -6,4 +6,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Qx.Domain.Labware\Qx.Domain.Labware.csproj" />
+      <ProjectReference Include="..\Qx.Domain\Qx.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

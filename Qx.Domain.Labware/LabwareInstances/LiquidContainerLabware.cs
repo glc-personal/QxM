@@ -8,15 +8,17 @@ namespace Qx.Domain.Labware.LabwareInstances;
 public sealed class LiquidContainerLabware : Labware
 {
     private readonly LiquidContainerModel _liquidContainerModel;
-    private readonly Dictionary<int, SealState> _sealStates = new Dictionary<int, SealState>();
     private readonly int _rowCount;
     private readonly int _columnCount;
+    // TODO: replace with SealStateMachine and VolumeStateMachine
+    private readonly Dictionary<int, SealState> _sealStates = new Dictionary<int, SealState>();
     private VolumeState _volumeState;
     
-    private LiquidContainerLabware(LabwareDefinition definition, Guid? id = null) : base(definition, id)
+    private LiquidContainerLabware(LabwareDefinition definition, LabwareId? id = null) : base(definition, id)
     {
         _liquidContainerModel = definition.LiquidContainerModel 
                                 ?? throw new NullReferenceException($"{nameof(definition.LiquidContainerModel)} must not be null for a {nameof(LiquidContainerLabware)}.");
+        ArgumentNullException.ThrowIfNull(definition.Geometry.Grid, $"{nameof(definition.Geometry)} must not be null for a {nameof(LiquidContainerLabware)}.");
         var columnIndexes = new List<int>();
         foreach (var column in _liquidContainerModel.Columns)
         {
@@ -34,7 +36,7 @@ public sealed class LiquidContainerLabware : Labware
         _volumeState = new VolumeState(wellAddresses);
     }
     
-    public static LiquidContainerLabware Create(LabwareDefinition definition, Guid? id = null)
+    public static LiquidContainerLabware Create(LabwareDefinition definition, LabwareId? id = null)
     {
         return new LiquidContainerLabware(definition,id); 
     }
@@ -79,7 +81,9 @@ public sealed class LiquidContainerLabware : Labware
     /// <param name="columnIndex">Column index of column to be pierced</param>
     public void PierceColumnSeal(int columnIndex)
     {
+        EnforceUnusableLifecycleState();
         EnforceValidColumnIndex(columnIndex);
+        if (_sealStates[columnIndex].Kind != SealStateKind.Sealed) return;
         _sealStates[columnIndex] = SealState.Pierced(DateTimeOffset.UtcNow);
     }
 
@@ -90,6 +94,7 @@ public sealed class LiquidContainerLabware : Labware
     /// <param name="volumesByRow">Volume to add per row</param>
     public void DispenseToColumn(int columnIndex, IReadOnlyList<Volume> volumesByRow)
     {
+        EnforceUnusableLifecycleState();
         EnforceValidColumnIndex(columnIndex);
         EnforceValidVolumes(volumesByRow, false);
         EnforceDispenseOnSealedColumnFails(columnIndex);
@@ -115,6 +120,7 @@ public sealed class LiquidContainerLabware : Labware
     /// <param name="volumesByRow">Volume to remove per row</param>
     public void AspirateFromColumn(int columnIndex, IReadOnlyList<Volume> volumesByRow)
     {
+        EnforceUnusableLifecycleState();
         EnforceValidColumnIndex(columnIndex);
         EnforceAspirationOnSealedColumnFails(columnIndex);
         EnforceValidVolumes(volumesByRow, false);
@@ -128,6 +134,7 @@ public sealed class LiquidContainerLabware : Labware
     
     public void SetColumnVolume(int columnIndex, IReadOnlyList<Volume> volumesByRow)
     {
+        EnforceUnusableLifecycleState();
         EnforceValidColumnIndex(columnIndex);
         EnforceValidVolumes(volumesByRow, false);
         var wellCapacity = GetWellColumnCapacity(columnIndex);
@@ -177,7 +184,7 @@ public sealed class LiquidContainerLabware : Labware
         {
             var invalidRowsString = string.Join(", ", rowIndexesWithIssues);
             // TODO: Don't ruin it for all the rows, only for the failed ones
-            throw new ArgumentException($"Insufficient volumes for aspiration in row(s) {invalidRowsString} of column {columnIndex}.");
+            throw new InvalidOperationException($"Insufficient volumes for aspiration in row(s) {invalidRowsString} of column {columnIndex}.");
         }
     }
 

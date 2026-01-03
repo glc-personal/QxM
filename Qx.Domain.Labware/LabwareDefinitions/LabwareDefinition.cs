@@ -5,10 +5,10 @@ using Version = Qx.Core.Version;
 
 namespace Qx.Domain.Labware.LabwareDefinitions;
 
-public sealed class LabwareDefinition : IUniquelyIdentifiable, INameable
+public sealed class LabwareDefinition : INameable
 {
-    internal LabwareDefinition(Guid id, string name, LabwareKind kind, Version version, LabwareGeometry geometry,
-        TipContainerModel? tipModel, LiquidContainerModel? liquidContainerModel, DeviceRole? deviceRole)
+    internal LabwareDefinition(LabwareId id, string name, LabwareKind kind, Version version, LabwareGeometry geometry,
+        TipRackModel? tipModel, LiquidContainerModel? liquidContainerModel, DeviceModel? deviceModel)
     {
         Id = id;
         Name = name;
@@ -17,36 +17,36 @@ public sealed class LabwareDefinition : IUniquelyIdentifiable, INameable
         Geometry = geometry;
         TipModel = tipModel;
         LiquidContainerModel = liquidContainerModel;
-        DeviceRole = deviceRole;
+        DeviceModel = deviceModel;
     }
     
-    public Guid Id { get; init; }
+    public LabwareId Id { get; init; }
     public string Name { get; init; }
     public LabwareKind Kind { get; init; }
     public Version Version { get; init; }
     public LabwareGeometry Geometry { get; init; }
-    public TipContainerModel? TipModel { get; init; }
+    public TipRackModel? TipModel { get; init; }
     public LiquidContainerModel? LiquidContainerModel { get; init; }
-    public DeviceRole? DeviceRole { get; init; }
+    public DeviceModel? DeviceModel { get; init; }
 
     /// <summary> Creates a Labware Definition </summary>
     public static LabwareDefinition Create(string name, LabwareKind kind, Version version, LabwareGeometry geometry, 
-        TipContainerModel? tipModel, LiquidContainerModel? liquidContainerModel, DeviceRole? deviceRole, Guid? id = null)
+        TipRackModel? tipModel, LiquidContainerModel? liquidContainerModel, DeviceModel? deviceRole, LabwareId? id = null)
     {
         EnforceDomainInvariants(name, kind, geometry, tipModel, liquidContainerModel, deviceRole);
-        return new LabwareDefinition(id ?? Guid.NewGuid(), name, kind, version, geometry, 
+        return new LabwareDefinition(id ?? new LabwareId(Guid.NewGuid()), name, kind, version, geometry, 
             tipModel, liquidContainerModel, deviceRole);
     }
 
     // Enforce domain invariants (business rules)
     private static void EnforceDomainInvariants(string name, LabwareKind kind, LabwareGeometry geometry,
-        TipContainerModel? tipModel, LiquidContainerModel? liquidContainerModel, DeviceRole? deviceRole)
+        TipRackModel? tipModel, LiquidContainerModel? liquidContainerModel, DeviceModel? deviceRole)
     {
         if (string.IsNullOrEmpty(name)) 
             throw new ArgumentException($"{nameof(LabwareDefinition)}.{nameof(Name)} cannot be null or empty and got: {name}");
         switch (kind)
         {
-            case LabwareKind.TipContainer:
+            case LabwareKind.TipRack:
                 EnsureGeometryHasGrid(kind, geometry);
                 if (tipModel == null) throw new ArgumentNullException($"{kind} labware requires {nameof(TipModel)}");
                 break;
@@ -55,7 +55,7 @@ public sealed class LabwareDefinition : IUniquelyIdentifiable, INameable
                 if (liquidContainerModel == null) throw new ArgumentNullException($"{kind} labware requires {nameof(LiquidContainerModel)}");
                 break;
             case LabwareKind.DeviceModule:
-                if (deviceRole == null) throw new ArgumentNullException($"{kind} labware requires {nameof(DeviceRole)}");
+                if (deviceRole == null) throw new ArgumentNullException($"{kind} labware requires {nameof(DeviceModel)}");
                 break;
             case LabwareKind.Fixture:
                 break;

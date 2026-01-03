@@ -21,9 +21,9 @@ public class LabwareGridTests
     public void LabwareGrid_Initialization_Tests(int rowCount, int columnCount, 
         decimal rowPitchMm, decimal columnPitchMm, decimal firstColumnOffsetMm)
     {
-        var rowPitch = new Millimeters(rowPitchMm);
-        var columnPitch = new Millimeters(columnPitchMm);
-        var firstColumnOffset = new Millimeters(firstColumnOffsetMm);
+        var rowPitch = new Mm(rowPitchMm);
+        var columnPitch = new Mm(columnPitchMm);
+        var firstColumnOffset = new Mm(firstColumnOffsetMm);
         if (rowCount <= 0 || columnCount <= 0)
         {
             Assert.Catch<ArgumentOutOfRangeException>(() =>

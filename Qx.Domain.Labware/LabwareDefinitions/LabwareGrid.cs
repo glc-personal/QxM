@@ -16,7 +16,7 @@ public sealed record LabwareGrid
     /// <param name="firstColumnOffsetMm">Spacing between the start of the labware and the first column</param>
     /// </summary>
     public LabwareGrid(int rowCount, int columnCount,
-        Millimeters rowPitchMm, Millimeters columnPitchMm, Millimeters firstColumnOffsetMm)
+        Mm rowPitchMm, Mm columnPitchMm, Mm firstColumnOffsetMm)
     {
         EnsureRowAndColumnCountIsNonZeroAndUnsigned(rowCount, columnCount);
         RowCount = rowCount;
@@ -29,9 +29,9 @@ public sealed record LabwareGrid
     
     public int RowCount { get; }
     public int ColumnCount { get; }
-    public Millimeters RowPitchMm { get; }
-    public Millimeters ColumnPitchMm { get; }
-    public Millimeters FirstColumnOffsetMm { get; }
+    public Mm RowPitchMm { get; }
+    public Mm ColumnPitchMm { get; }
+    public Mm FirstColumnOffsetMm { get; }
 
     private void EnsureRowAndColumnCountIsNonZeroAndUnsigned(int rowCount, int columnCount)
     {
@@ -40,10 +40,10 @@ public sealed record LabwareGrid
     }
     
     
-    private void EnsureDimensionsAreNonZero(Millimeters rowPitchMm, Millimeters columnPitchMm,
-        Millimeters firstColumnOffsetMm)
+    private void EnsureDimensionsAreNonZero(Mm rowPitchMm, Mm columnPitchMm,
+        Mm firstColumnOffsetMm)
     {
-        if (rowPitchMm.Equals(Millimeters.Zero) || columnPitchMm.Equals(Millimeters.Zero) || firstColumnOffsetMm.Equals(Millimeters.Zero))
+        if (rowPitchMm.Equals(Mm.Zero) || columnPitchMm.Equals(Mm.Zero) || firstColumnOffsetMm.Equals(Mm.Zero))
             throw new ArgumentOutOfRangeException($"{nameof(LabwareGrid)} requirues non-zero dimensions " +
                                                   $"({nameof(RowPitchMm)}: {rowPitchMm}, " +
                                                   $"{nameof(ColumnPitchMm)}: {columnPitchMm}, " +

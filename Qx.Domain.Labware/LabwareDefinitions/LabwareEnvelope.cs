@@ -9,17 +9,17 @@ namespace Qx.Domain.Labware.LabwareDefinitions;
 /// </summary>
 public sealed record LabwareEnvelope
 {
-    public LabwareEnvelope(Millimeters lengthXMm, Millimeters widthYMm, Millimeters heightZMm)
+    public LabwareEnvelope(Mm lengthXMm, Mm widthYMm, Mm heightZMm)
     {
-        if (lengthXMm.Equals(Millimeters.Zero) || widthYMm.Equals(Millimeters.Zero) ||
-            heightZMm.Equals(Millimeters.Zero))
+        if (lengthXMm.Equals(Mm.Zero) || widthYMm.Equals(Mm.Zero) ||
+            heightZMm.Equals(Mm.Zero))
             throw new LabwareEnvelopException(this);
         LengthXMm = lengthXMm;
         WidthYMm = widthYMm;
         HeightZMm = heightZMm;
     }
     
-    public Millimeters LengthXMm { get; }
-    public Millimeters WidthYMm { get; }
-    public Millimeters HeightZMm { get; }
+    public Mm LengthXMm { get; }
+    public Mm WidthYMm { get; }
+    public Mm HeightZMm { get; }
 }

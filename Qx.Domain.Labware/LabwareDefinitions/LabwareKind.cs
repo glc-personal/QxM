@@ -7,6 +7,6 @@ public enum LabwareKind
 {
     DeviceModule,       // device labware (communication with a real device or simulator)
     Fixture,            // fixture labware (nests, adapters, clamps, carriers, etc)
-    TipContainer,       // tip containing labware
+    TipRack,            // tip rack labware
     LiquidContainer,    // liquid containing labware
 }

@@ -25,10 +25,6 @@
     <ItemGroup>
       <ProjectReference Include="..\Qx.Application.Services\Qx.Application.Services.csproj" />
       <ProjectReference Include="..\Qx.Infrastructure.Persistence\Qx.Infrastructure.Persistence.csproj" />
-      <ProjectReference Include="..\Qx.Services.InstrumentOrchestrator\Qx.Services.InstrumentOrchestrator.csproj" />
-      <ProjectReference Include="..\Qx.Services.InstrumentScheduler\Qx.Services.InstrumentScheduler.csproj" />
-      <ProjectReference Include="..\Qx.Services.RunOrchestrator\Qx.Services.RunOrchestrator.csproj" />
-      <ProjectReference Include="..\Qx.Services.RunScheduler\Qx.Services.RunScheduler.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -6,4 +6,17 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Exceptions\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.IO.Ports" Version="10.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Qx.Core.Measurement\Qx.Core.Measurement.csproj" />
+      <ProjectReference Include="..\Qx.Core\Qx.Core.csproj" />
+    </ItemGroup>
+
 </Project>
