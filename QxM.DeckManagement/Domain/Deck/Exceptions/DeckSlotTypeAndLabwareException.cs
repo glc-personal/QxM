@@ -1,6 +1,6 @@
 using Qx.Domain.Labware.LabwareDefinitions;
 
-namespace Qx.Domain.Deck.Exceptions;
+namespace QxM.DeckManagement.Domain.Deck.Exceptions;
 
 public class DeckSlotTypeAndLabwareException(DeckSlotType deckSlotType, LabwareDefinitionReference labware)
     : ArgumentException($"Expected {deckSlotType} labware but got {labware.Name}");

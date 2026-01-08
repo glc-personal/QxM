@@ -1,6 +1,6 @@
 using Qx.Core.Measurement;
 
-namespace Qx.Domain.Deck;
+namespace QxM.DeckManagement.Domain.Deck;
 
 /// <summary>
 /// Deck slot pose to define where the deck slot is in the deck's coordinate frame

@@ -1,4 +1,4 @@
-namespace Qx.Domain.Deck;
+namespace QxM.DeckManagement.Domain.Deck;
 
 public enum Occupancy
 {

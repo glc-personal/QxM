@@ -1,4 +1,4 @@
-namespace Qx.Domain.Deck;
+namespace QxM.DeckManagement.Domain.Deck;
 
 /// <summary>
 /// Possible deck slot types
