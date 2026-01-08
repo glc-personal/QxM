@@ -1,4 +1,4 @@
-namespace Qx.Domain.Deck;
+namespace QxM.DeckManagement.Domain.Deck;
 
 /// <summary>
 /// Deck slot value object representing a slot on the deck for labware

@@ -1,7 +1,7 @@
-using Qx.Domain.Deck.Exceptions;
 using Qx.Domain.Labware.LabwareDefinitions;
+using QxM.DeckManagement.Domain.Deck.Exceptions;
 
-namespace Qx.Domain.Deck;
+namespace QxM.DeckManagement.Domain.Deck;
 
 public sealed class DeckSlot
 {

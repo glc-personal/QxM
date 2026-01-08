@@ -1,4 +1,4 @@
-namespace Qx.Domain.Deck.Exceptions;
+namespace QxM.DeckManagement.Domain.Deck.Exceptions;
 
 public class DeckSlotKeyException(DeckSlotType type, Batch? batch) 
     : ArgumentException(BuildMessage(type, batch))

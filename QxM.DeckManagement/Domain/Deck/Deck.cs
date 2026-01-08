@@ -1,6 +1,6 @@
 using Qx.Domain.Labware.LabwareDefinitions;
 
-namespace Qx.Domain.Deck;
+namespace QxM.DeckManagement.Domain.Deck;
 
 public sealed class Deck
 {

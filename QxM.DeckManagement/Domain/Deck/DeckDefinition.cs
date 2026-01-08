@@ -1,6 +1,6 @@
-using Qx.Domain.Deck.Exceptions;
+using QxM.DeckManagement.Domain.Deck.Exceptions;
 
-namespace Qx.Domain.Deck;
+namespace QxM.DeckManagement.Domain.Deck;
 
 public sealed class DeckDefinition
 {

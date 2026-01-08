@@ -1,6 +1,4 @@
-using Qx.Domain.Deck.Exceptions;
-
-namespace Qx.Domain.Deck;
+namespace QxM.DeckManagement.Domain.Deck;
 
 /// <summary>
 /// Deck slot key

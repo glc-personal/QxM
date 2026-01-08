@@ -1,5 +1,4 @@
 using Grpc.Core;
-using Qx.WorkCell;
 
 namespace Qx.WorkCell.Services;
 

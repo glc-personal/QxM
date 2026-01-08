@@ -1,5 +1,4 @@
 using Qx.Core.Measurement;
-using Qx.Domain.Deck.Exceptions;
 using Qx.Domain.Labware.LabwareDefinitions;
 using Version = Qx.Core.Version;
 

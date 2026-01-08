@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Qx.Domain.Deck.Exceptions;
+namespace QxM.DeckManagement.Domain.Deck.Exceptions;
 
 public class DeckMissingSlotException(List<DeckSlotKey> missingKeys) : KeyNotFoundException(BuildMessage(missingKeys))
 {
