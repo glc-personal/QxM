@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option csharp_namespace = "QxM.HardwareGateway";
+
+package qxm.ics;
+
+import "Protos/status.proto";
+
+message CommandState {
+  Status status = 1;
+  string detail = 2;
+}

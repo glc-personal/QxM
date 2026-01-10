@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option csharp_namespace = "QxM.HardwareGateway";
+
+package qxm.ics;
+
+import "Protos/command_state.proto";
+
+message CheckCommandResponse {
+  CommandState state = 1;
+}

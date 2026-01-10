@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option csharp_namespace = "QxM.HardwareGateway";
+
+package qxm.ics;
+
+import "Protos/command_spec.proto";
+
+message SendCommandRequest {
+  string run_id = 1;
+  string idempotency_key = 2;
+  CommandSpec spec = 3;
+}

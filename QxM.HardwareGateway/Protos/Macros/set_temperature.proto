@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option csharp_namespace = "QxM.HardwareGateway";
+
+package qxm.ics;
+
+message SetTemperature {
+  int32 address = 1;
+  double setpoint_c = 2;
+  bool block_till_stable = 3; // could be a temperature that we block till
+  double tolerance_c = 4;
+  uint32 timeout_seconds = 5;
+}

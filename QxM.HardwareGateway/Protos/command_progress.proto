@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option csharp_namespace = "QxM.HardwareGateway";
+
+package qxm.ics;
+
+message CommandProgress {
+  double percent = 1;
+  string message = 2;
+}

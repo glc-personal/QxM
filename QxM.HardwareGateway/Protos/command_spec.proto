@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option csharp_namespace = "QxM.HardwareGateway";
+
+package qxm.ics;
+
+import "Protos/Macros/dispense.proto";
+import "Protos/Macros/set_temperature.proto";
+
+message CommandSpec {
+  oneof command {
+    Dispense dispense = 1;
+    SetTemperature set_temperature = 2;
+  }
+}

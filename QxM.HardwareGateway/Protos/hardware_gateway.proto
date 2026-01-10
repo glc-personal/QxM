@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option csharp_namespace = "QxM.HardwareGateway";
+
+package qxm.ics;
+
+import "Protos/check_command_request.proto";
+import "Protos/check_command_response.proto";
+import "Protos/command_event.proto";
+import "Protos/send_command_request.proto";
+import "Protos/send_command_response.proto";
+import "Protos/subscribe_to_command_request.proto";
+
+// Hardware Gateway Service Definition:
+service HardwareGateway {
+  // Send a hardware command request
+  rpc SendCommand(SendCommandRequest) returns (SendCommandResponse);
+  
+  // Check the state of a hardware command request
+  rpc CheckCommand(CheckCommandRequest) returns (CheckCommandResponse);
+  
+  // Subscribe to a hardware command
+  rpc SubscribeToCommand(SubscribeToCommandRequest) returns (stream CommandEvent);
+}

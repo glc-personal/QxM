@@ -1,0 +1,9 @@
+{
+  "GatewayCommunication":{
+    "IsSimulated": true,
+    "ComPort": "COM8",
+    "BaudRate": 9600,
+    "CanInterface": "slcan0",
+    "TimeoutMs": 1000
+  }
+}

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "QxM.HardwareGateway";
+
+package qxm.ics;
+
+import "Protos/command_progress.proto";
+import "Protos/command_completed.proto";
+import "Protos/command_fault.proto";
+
+message CommandEvent {
+  string run_id = 1;
+  string command_id = 2;
+  int64 utc_unix_ms = 3;
+  
+  oneof payload {
+    CommandProgress progress = 10;
+    CommandCompleted completed = 11;
+    CommandFault fault = 12;
+  }
+}

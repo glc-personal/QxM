@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option csharp_namespace = "QxM.HardwareGateway";
+
+package qxm.ics;
+
+message SubscribeToCommandRequest {
+  string run_id = 1;
+}

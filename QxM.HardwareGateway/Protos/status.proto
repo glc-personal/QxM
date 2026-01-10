@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option csharp_namespace = "QxM.HardwareGateway";
+
+package qxm.ics;
+
+enum Status {
+  STATUS_UNSPECIFIED = 0;
+  QUEUED = 1;
+  RUNNING = 2;
+  COMPLETED = 3;
+  FAULTED = 4;
+  CANCELED = 5;
+}
