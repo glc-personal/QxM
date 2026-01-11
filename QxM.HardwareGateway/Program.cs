@@ -1,4 +1,3 @@
-using QxM.HardwareGateway.Infrastructure;
 using QxM.HardwareGateway.Services;
 
 var builder = WebApplication.CreateBuilder(args);
