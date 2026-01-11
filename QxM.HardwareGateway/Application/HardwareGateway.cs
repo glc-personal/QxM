@@ -1,5 +1,5 @@
 using QxM.HardwareGateway.Core;
-using QxM.HardwareGateway.Core.Can;
+using QxM.HardwareGateway.Infrastructure;
 
 namespace QxM.HardwareGateway.Application;
 
@@ -14,7 +14,7 @@ public class HardwareGateway : IHardwareGateway
     {
         _communication = communication;
     }
-    
+
     public async Task ConnectAsync(CancellationToken cancellationToken = default)
     {
         await _communication.ConnectAsync(cancellationToken);

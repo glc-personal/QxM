@@ -8,55 +8,36 @@ namespace QxM.HardwareGateway.Core.Can;
 public readonly record struct CanFrame
 {
     public ArbitrationId Id { get; }
-    public RemoteTransmitRequest Rtr { get; }
-    public IdentifierExtension Extension { get; }
-    public DataLengthCode Dlc { get; }
+    public bool IsRemoteTransmitRequest { get; }
     public ReadOnlyMemory<byte> Data { get; }
-    public CyclicRedundancyCheck Crc { get; }
-    public Ack Ack { get; }
         
-    private CanFrame(ArbitrationId id, RemoteTransmitRequest rtr, IdentifierExtension extension, 
-        ReadOnlyMemory<byte> data, CyclicRedundancyCheck crc, Ack ack)
+    private CanFrame(ArbitrationId id, bool isRemoteTransmitRequest, ReadOnlyMemory<byte> data)
     {
-        EnforceIdentifierExtensionAndArbitrationId(extension, id);
-        EnforceRemoteFrameDataLength(rtr, data);
+        EnforceRemoteFrameDataLength(isRemoteTransmitRequest, data);
         Id = id;
-        Rtr = rtr;
-        Extension = extension;
-        Dlc = new DataLengthCode(data.Length);
         Data = data;
-        Crc = crc;
-        Ack = ack;
+        IsRemoteTransmitRequest = isRemoteTransmitRequest;
     }
 
-    public static CanFrame Create(ArbitrationId id, RemoteTransmitRequest rtr, IdentifierExtension extension,
-        ReadOnlyMemory<byte> data, CyclicRedundancyCheck crc, Ack ack)
+    public static CanFrame Create(ArbitrationId id, bool isRemoteTransmitRequest, ReadOnlyMemory<byte> data)
     {
-        return new CanFrame(id, rtr, extension, data, crc, ack);
+        return new CanFrame(id, isRemoteTransmitRequest, data);
     }
 
     public override string ToString()
     {
         var stringBuilder = new StringBuilder()
             .AppendLine($"Id: {Id.Value}")
-            .AppendLine($"Rtr: {Rtr.IsRemoteFrame}")
-            .AppendLine($"Extension: {Extension.IsExtended}")
+            .AppendLine($"Is Remote Frame: {IsRemoteTransmitRequest}")
+            .AppendLine($"Extended Frame: {Id.IsExtended}")
             .AppendLine($"Data: {Data.ToArray().ToString()}")
-            .AppendLine($"Crc: {Crc.Value}")
-            .AppendLine($"Ack: {Ack.IsNotAcknowledged}");
+            .AppendLine($"Data Length Code: {Data.Length}");
         return stringBuilder.ToString();
     }
 
-    private static void EnforceRemoteFrameDataLength(RemoteTransmitRequest rtr, ReadOnlyMemory<byte> data)
+    private static void EnforceRemoteFrameDataLength(bool isRemoteTransmitRequest, ReadOnlyMemory<byte> data)
     {
-        if (rtr.IsRemoteFrame && data.Length != 0)
-            throw new ArgumentException($"Invalid {nameof(CanFrame)}: Remote frame ({rtr.IsRemoteFrame}) always contain zero data bytes ({data.Length} bytes)");
-    }
-
-    private static void EnforceIdentifierExtensionAndArbitrationId(IdentifierExtension identifierExtension, ArbitrationId arbitrationId)
-    {
-        if ((identifierExtension.IsExtended && !arbitrationId.IsExtended) ||
-            (!identifierExtension.IsExtended && arbitrationId.IsExtended))
-            throw new ArgumentException($"Invalid {nameof(CanFrame)}: Arbitration ID (extended: {arbitrationId.IsExtended}) and Identifier Extension (extended: {identifierExtension.IsExtended}) must be standard or both extended.");
+        if (isRemoteTransmitRequest && data.Length != 0)
+            throw new ArgumentException($"Invalid {nameof(CanFrame)}: Remote frame ({isRemoteTransmitRequest}) always contain zero data bytes ({data.Length} bytes)");
     }
 }

@@ -13,9 +13,14 @@ public sealed class SimulatedGatewayCommunication : IGatewayCommunication
 
     private SimulatedGatewayCommunication(GatewayCommunicationOptions options)
     {
-        _options = options;
+        Configure(options);
     }
 
+    /// <summary>
+    /// Gateway Communication Factory from <see cref="GatewayCommunicationOptions"/>
+    /// </summary>
+    /// <param name="options"></param>
+    /// <returns></returns>
     public static IGatewayCommunication Create(GatewayCommunicationOptions options)
     {
         return new SimulatedGatewayCommunication(options);
@@ -42,8 +47,7 @@ public sealed class SimulatedGatewayCommunication : IGatewayCommunication
 
     public Task<CanFrame> ReadAsync(CancellationToken cancellationToken = default)
     {
-        var crc = CyclicRedundancyCheck.Create(_canFrame.Data);
-        var canFrame = CanFrame.Create(_canFrame.Id, _canFrame.Rtr, _canFrame.Extension, _canFrame.Data, crc, Ack.Dominant);
+        var canFrame = CanFrame.Create(_canFrame.Id, _canFrame.IsRemoteTransmitRequest, _canFrame.Data);
         Console.WriteLine($"Reading CAN Frame: {canFrame}");
         return Task.FromResult(canFrame);
     }
