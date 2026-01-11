@@ -11,11 +11,11 @@ builder.Configuration.AddJsonFile(
     path: "Config/hardwaregateway.json",
     optional: false,
     reloadOnChange: true);
-builder.Services
-    .AddOptions<GatewayCommunicationOptions>()
-    .Bind(builder.Configuration.GetSection("GatewayCommunication"))
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
+//builder.Services
+//    .AddOptions<GatewayClientOptions>()
+//    .Bind(builder.Configuration.GetSection("GatewayCommunication"))
+//    .ValidateDataAnnotations()
+//    .ValidateOnStart();
 
 var app = builder.Build();
 
