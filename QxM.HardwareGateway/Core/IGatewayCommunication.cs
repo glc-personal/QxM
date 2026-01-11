@@ -1,5 +1,4 @@
 using QxM.HardwareGateway.Core.Can;
-using QxM.HardwareGateway.Infrastructure;
 
 namespace QxM.HardwareGateway.Core;
 
