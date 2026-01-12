@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QxM.HardwareGateway", "QxM.HardwareGateway\QxM.HardwareGateway.csproj", "{C49E33F7-4CFC-4100-8923-72C3ABD3C58C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QxM.HardwareGateway", "QxM.HardwareGateway\QxM.HardwareGateway.csproj", "{281AC426-88D8-4815-9BC0-586783F087B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,10 +8,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C49E33F7-4CFC-4100-8923-72C3ABD3C58C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C49E33F7-4CFC-4100-8923-72C3ABD3C58C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C49E33F7-4CFC-4100-8923-72C3ABD3C58C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C49E33F7-4CFC-4100-8923-72C3ABD3C58C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{281AC426-88D8-4815-9BC0-586783F087B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{281AC426-88D8-4815-9BC0-586783F087B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{281AC426-88D8-4815-9BC0-586783F087B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{281AC426-88D8-4815-9BC0-586783F087B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
