@@ -1,0 +1,29 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+:FiniteStateMachine;
+
+start
+
+fork
+    :Task.Run(PumpAsync);
+    while (FiniteStateMachine alive?)
+        :channel.TryRead(out var trigger);
+        :FiniteStateMachine.ApplyTrigger(trigger);
+        if (onTransition.TryGetValue(_currentState, out var onTransition))
+            :await onTransition;
+        endif
+    endwhile
+fork again
+    while (Transitions possible?)
+        :FiniteStateMachine.FireAsync(trigger, reason);
+        :FiniteStateMachine.Channel.TryWrite(trigger, reason);
+    endwhile
+forkend
+    
+:FiniteStateMachine.Dispose();
+
+stop
+
+
+@enduml

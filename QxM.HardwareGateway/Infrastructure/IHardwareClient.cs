@@ -1,6 +1,7 @@
 using QxM.HardwareGateway.Core;
 using QxM.HardwareGateway.Core.Events;
 using QxM.HardwareGateway.Core.Policy;
+using QxM.HardwareGateway.Core.State;
 
 namespace QxM.HardwareGateway.Infrastructure;
 

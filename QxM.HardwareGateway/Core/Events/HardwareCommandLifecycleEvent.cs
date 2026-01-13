@@ -10,5 +10,5 @@ public sealed record HardwareCommandLifecycleEvent(
     IdempotencyKey IdempotencyKey,
     string Operation,
     CommandStatus Status,
-    HardwareError Error)
+    HardwareError? Error)
     : HardwareEvent(TimestampUtc, HardwareId, HardwareKind, CorrelationId, Address);
