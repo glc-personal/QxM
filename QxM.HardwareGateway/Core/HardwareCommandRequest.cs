@@ -1,17 +1,17 @@
 namespace QxM.HardwareGateway.Core;
 
-public sealed record HardwareCommandRequest
+public abstract record HardwareCommandRequest
 {
     public CommandId Id { get; }
     public IdempotencyKey IdempotencyKey { get; }
     public CorrelationId CorrelationId { get; }
-    public Address Address { get; }
+    public Address? Address { get; }
     public string Operation { get; }
     public ReadOnlyMemory<byte> Payload { get; }
     public TimeSpan Timeout { get; }
-    
-    private HardwareCommandRequest(CommandId commandId, IdempotencyKey idempotencyKey, CorrelationId correlationId,
-        Address address, string operation, ReadOnlyMemory<byte> payload, TimeSpan timeout)
+
+    protected HardwareCommandRequest(CommandId commandId, IdempotencyKey idempotencyKey, CorrelationId correlationId,
+        Address? address, string operation, ReadOnlyMemory<byte> payload, TimeSpan timeout)
     {
         EnforceOperation(operation);
         EnforceTimeout(timeout);
@@ -24,10 +24,6 @@ public sealed record HardwareCommandRequest
         Timeout = timeout;
     }
 
-    public static HardwareCommandRequest Create(IdempotencyKey idempotencyKey, CorrelationId correlationId,
-        Address address, string operation, ReadOnlyMemory<byte> payload, TimeSpan timeout) 
-        => new HardwareCommandRequest(CommandId.New(), idempotencyKey, correlationId, address, operation, payload, timeout);
-    
     private void EnforceOperation(string operation)
     {
         if (string.IsNullOrWhiteSpace(operation))

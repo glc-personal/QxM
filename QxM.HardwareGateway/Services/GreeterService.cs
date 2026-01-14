@@ -1,5 +1,4 @@
 using Grpc.Core;
-using QxM.HardwareGateway;
 
 namespace QxM.HardwareGateway.Services;
 
