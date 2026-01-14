@@ -1,3 +1,5 @@
+using QxM.HardwareGateway.Core.State;
+
 namespace QxM.HardwareGateway.Core;
 
 public sealed record HardwareHeartbeat(

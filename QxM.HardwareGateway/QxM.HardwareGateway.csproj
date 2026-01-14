@@ -24,7 +24,6 @@
     <ItemGroup>
       <Folder Include="Application\" />
       <Folder Include="Config\" />
-      <Folder Include="Docs\" />
     </ItemGroup>
 
 </Project>
