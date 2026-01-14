@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 using System.Threading.Channels;
 using QxM.HardwareGateway.Core;
 using QxM.HardwareGateway.Core.Events;
@@ -179,6 +180,9 @@ public sealed class SimulatedIcbClient : IHardwareClient, IAsyncDisposable
     {
         EnsureConnected();
 
+        // set as a CAN Frame Command Request
+        request = ((CanFrameCommandRequest)request);
+
         _completed.TryAdd(request.Id, 
             new TaskCompletionSource<HardwareCommandResponse>(TaskCreationOptions.RunContinuationsAsynchronously));
         
@@ -235,6 +239,9 @@ public sealed class SimulatedIcbClient : IHardwareClient, IAsyncDisposable
         EnsureConnected();
         CleanupIdempotency();
         
+        // set as a CAN Frame Command Request
+        request = ((CanFrameCommandRequest)request);
+        
         using var cts = new CancellationTokenSource(TimeoutPolicy.CommandTimeout);
         using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cts.Token);
 
@@ -265,7 +272,7 @@ public sealed class SimulatedIcbClient : IHardwareClient, IAsyncDisposable
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async IAsyncEnumerable<HardwareEvent> SubscribeAsync(CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<HardwareEvent> SubscribeAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         while (await _eventsChannel.Reader.WaitToReadAsync(cancellationToken).ConfigureAwait(false))
         {
@@ -314,6 +321,8 @@ public sealed class SimulatedIcbClient : IHardwareClient, IAsyncDisposable
 
     private async Task RunCommandAsync(HardwareCommandRequest request, CancellationToken linkedToken)
     {
+        request = ((CanFrameCommandRequest)request);
+        
         try
         {
             await Task.Delay(_executeLatency, linkedToken).ConfigureAwait(false);
