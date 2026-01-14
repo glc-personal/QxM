@@ -13,7 +13,7 @@ public readonly record struct CyclicRedundancyCheck
 
     private void EnforceBitCount(int value)
     {
-        if (value <= 0x7FFF)
+        if (value > 0x7FFF)
             throw new ArgumentException($"{nameof(CyclicRedundancyCheck)} must be 15-bits");
     }
 }

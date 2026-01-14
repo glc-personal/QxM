@@ -1,6 +1,6 @@
 using Grpc.Core;
-using QxM.HardwareGateway;
 using QxM.HardwareGateway.Core;
+using QxM.HardwareGateway.Core.Can;
 using QxM.HardwareGateway.Core.Policy;
 using QxM.HardwareGateway.Infrastructure.Simulators;
 
@@ -24,14 +24,16 @@ public class GreeterService : Greeter.GreeterBase
         Console.WriteLine($"{_icb.HardwareKind} Connection State: {_icb.ConnectionState}");
         _icb.ConnectAsync().Wait();
         Console.WriteLine($"{_icb.HardwareKind} Connection State: {_icb.ConnectionState}");
-        var commandRequest = HardwareCommandRequest.Create(IdempotencyKey.New(), CorrelationId.New(), new Address(1),
-            "mabs", new ReadOnlyMemory<byte>([1, 2, 3]), _icb.TimeoutPolicy.CommandTimeout);
+        var commandRequest = new CanFrameCommandRequest(IdempotencyKey.New(), CorrelationId.New(), new Address(1),
+            "mabs", new ReadOnlyMemory<byte>([1,2,3]), _icb.TimeoutPolicy.CommandTimeout, new StartOfFrame(">"),
+            new EndOfFrame("<"), false, false);
         var response = _icb.ExecuteCommandAsync(commandRequest).Result;
         Console.WriteLine($"{response.CommandId}");
         Console.WriteLine($"{response.Status}");
         Console.WriteLine($"{response.IsTerminal}");
         Console.WriteLine($"{response.Payload}");
         Console.WriteLine($"{response.Error}");
+        Console.WriteLine($"{commandRequest.CanFrame}");
         return Task.FromResult(new HelloReply
         {
             Message = $"Hello from {_icb.HardwareKind}"

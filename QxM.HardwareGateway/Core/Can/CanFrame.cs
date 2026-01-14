@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace QxM.HardwareGateway.Core.Can;
 
 public readonly record struct CanFrame
@@ -22,7 +24,17 @@ public readonly record struct CanFrame
         CyclicRedundancyCheck = new CyclicRedundancyCheck(data);
         EndOfFrame = endOfFrame;
     }
-    
+
+    public override string ToString()
+    {
+        var payload = string.Empty;
+        foreach (var b in Data.Span)
+        {
+            payload += $"{b},";
+        }
+        return $"{StartOfFrame.Value},{ArbitrationId.Value},{payload}{EndOfFrame.Value}";
+    }
+
     private void EnforceRemoteFrameAndDataLength(bool isRemoteTransmitRequest, ReadOnlyMemory<byte> data)
     {
         if (isRemoteTransmitRequest && data.Length > 0)
