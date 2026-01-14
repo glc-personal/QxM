@@ -9,7 +9,7 @@ using QxM.HardwareGateway.Core.Utilities;
 
 namespace QxM.HardwareGateway.Infrastructure.Simulators;
 
-public sealed class SimulatedIcbClient : IHardwareClient, IAsyncDisposable
+public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>, IAsyncDisposable
 {
     private readonly FiniteStateMachine<ConnectionState, ConnectionTrigger> _fsm;
     private readonly Channel<HardwareEvent> _eventsChannel;
@@ -176,12 +176,9 @@ public sealed class SimulatedIcbClient : IHardwareClient, IAsyncDisposable
     /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<HardwareCommandResponse> ExecuteCommandAsync(HardwareCommandRequest request, CancellationToken cancellationToken = default)
+    public async Task<HardwareCommandResponse> ExecuteCommandAsync(CanFrameCommandRequest request, CancellationToken cancellationToken = default)
     {
         EnsureConnected();
-
-        // set as a CAN Frame Command Request
-        request = ((CanFrameCommandRequest)request);
 
         _completed.TryAdd(request.Id, 
             new TaskCompletionSource<HardwareCommandResponse>(TaskCreationOptions.RunContinuationsAsynchronously));
@@ -234,13 +231,10 @@ public sealed class SimulatedIcbClient : IHardwareClient, IAsyncDisposable
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<HardwareCommandAccepted> SubmitCommandAsync(HardwareCommandRequest request, CancellationToken cancellationToken = default)
+    public async Task<HardwareCommandAccepted> SubmitCommandAsync(CanFrameCommandRequest request, CancellationToken cancellationToken = default)
     {
         EnsureConnected();
         CleanupIdempotency();
-        
-        // set as a CAN Frame Command Request
-        request = ((CanFrameCommandRequest)request);
         
         using var cts = new CancellationTokenSource(TimeoutPolicy.CommandTimeout);
         using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cts.Token);
