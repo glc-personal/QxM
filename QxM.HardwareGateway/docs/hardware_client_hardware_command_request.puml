@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+:HardwareClient.ExecuteCommandAsync(HardwareCommandRequest request);
+
+start
+
+if (Client Connected) then (yes)
+    :tasks.Add(request.Id);
+    :SubmitCommandAsync(request);
+    while (task not done)
+        :task.WaitAsync();
+    endwhile
+else
+    #pink:InvalidOperationException;
+    stop;
+endif
+
+stop
+
+@enduml

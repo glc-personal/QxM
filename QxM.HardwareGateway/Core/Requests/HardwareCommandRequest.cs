@@ -1,4 +1,4 @@
-namespace QxM.HardwareGateway.Core;
+namespace QxM.HardwareGateway.Core.Requests;
 
 public abstract record HardwareCommandRequest
 {
