@@ -1,4 +1,4 @@
-namespace QxM.HardwareGateway.Core;
+namespace QxM.HardwareGateway.Core.Requests;
 
 public sealed record ApiCommandRequest : HardwareCommandRequest
 {

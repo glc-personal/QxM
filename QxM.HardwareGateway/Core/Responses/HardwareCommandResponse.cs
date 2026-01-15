@@ -1,4 +1,4 @@
-namespace QxM.HardwareGateway.Core;
+namespace QxM.HardwareGateway.Core.Responses;
 
 public sealed record HardwareCommandResponse(CommandId CommandId, CommandStatus Status, HardwareError? Error,
     ReadOnlyMemory<byte> Payload)

@@ -2,6 +2,7 @@ using Grpc.Core;
 using QxM.HardwareGateway.Core;
 using QxM.HardwareGateway.Core.Can;
 using QxM.HardwareGateway.Core.Policy;
+using QxM.HardwareGateway.Core.Requests;
 using QxM.HardwareGateway.Infrastructure.Simulators;
 
 namespace QxM.HardwareGateway.Services;

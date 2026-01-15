@@ -1,6 +1,6 @@
 using QxM.HardwareGateway.Core.Can;
 
-namespace QxM.HardwareGateway.Core;
+namespace QxM.HardwareGateway.Core.Requests;
 
 public sealed record CanFrameCommandRequest : HardwareCommandRequest
 {
