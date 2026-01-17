@@ -1,5 +1,6 @@
 using QxM.HardwareGateway.Core;
 using QxM.HardwareGateway.Core.Events;
+using QxM.HardwareGateway.Core.Policy;
 using QxM.HardwareGateway.Core.Requests;
 using QxM.HardwareGateway.Core.Responses;
 
@@ -9,6 +10,7 @@ public interface IHardwareAdapter
 {
     HardwareId HardwareId { get; }
     HardwareKind HardwareKind { get; }
+    TimeoutPolicy TimeoutPolicy { get; }
     
     Task<HardwareGatewayCommandResponseEnvelope> ExecuteCommandAsync(HardwareGatewayCommandRequestEnvelope envelope, 
         CancellationToken cancellationToken = default);
