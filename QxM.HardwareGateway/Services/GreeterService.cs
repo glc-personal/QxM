@@ -20,13 +20,14 @@ public class GreeterService : Greeter.GreeterBase
             TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10));
         _icb = new SimulatedIcbClient(tp);
         _icbAdapater = new SimulatedIcbAdapter(_icb);
+        
+        Console.WriteLine($"{_icb.HardwareKind} Connection State: {_icb.ConnectionState}");
+        _icb.ConnectAsync().Wait();
+        Console.WriteLine($"{_icb.HardwareKind} Connection State: {_icb.ConnectionState}");
     }
 
     public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
     {
-        Console.WriteLine($"{_icb.HardwareKind} Connection State: {_icb.ConnectionState}");
-        _icb.ConnectAsync().Wait();
-        Console.WriteLine($"{_icb.HardwareKind} Connection State: {_icb.ConnectionState}");
         var envelope = new HardwareGatewayCommandRequestEnvelope(IdempotencyKey.New(), CorrelationId.New(), new Address(1),
             "mabs", new ReadOnlyMemory<byte>([1,2,3,4]), _icb.TimeoutPolicy.CommandTimeout);
         var response = _icbAdapater.ExecuteCommandAsync(envelope).Result;

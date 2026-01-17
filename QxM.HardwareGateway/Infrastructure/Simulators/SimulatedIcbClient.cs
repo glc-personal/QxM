@@ -136,7 +136,7 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
     }
 
     /// <summary>
-    /// Get the hearbeat of the client
+    /// Get the heartbeat of the client
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
@@ -238,15 +238,12 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
         EnsureConnected();
         CleanupIdempotency();
         
-        using var cts = new CancellationTokenSource(TimeoutPolicy.CommandTimeout);
-        using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cts.Token);
-
         if (_idempotency.TryGetValue(request.IdempotencyKey, out var idempotencyKey)
             && idempotencyKey.ExpiresAt > DateTimeOffset.UtcNow)
         {
             await EmitCommandLifecycleEvent($"Command {request.Id} submitted", request.CorrelationId, 
                 request.Address, request.Id, request.IdempotencyKey, request.Operation, CommandStatus.Accepted, 
-                null, linkedCts.Token)
+                null, cancellationToken)
                 .ConfigureAwait(false);
             return new HardwareCommandAccepted(request.Id, DateTimeOffset.UtcNow);
         }
@@ -254,12 +251,12 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
         var commandId = request.Id;
         _idempotency[request.IdempotencyKey] = (commandId, DateTimeOffset.UtcNow.Add(_idempotencyExpiration));
         _completed.TryAdd(commandId, new TaskCompletionSource<HardwareCommandResponse>(TaskCreationOptions.RunContinuationsAsynchronously));
-        await Task.Delay(_submitLatency, linkedCts.Token).ConfigureAwait(false);
+        await Task.Delay(_submitLatency, cancellationToken).ConfigureAwait(false);
         await EmitCommandLifecycleEvent($"Command {request.Id} submitted", request.CorrelationId, 
                 request.Address, request.Id, request.IdempotencyKey, request.Operation, CommandStatus.Accepted, 
-                null, linkedCts.Token)
+                null, cancellationToken)
             .ConfigureAwait(false);
-        _ = RunCommandAsync(request, linkedCts.Token);
+        _ = RunCommandAsync(request, cancellationToken);
         return new HardwareCommandAccepted(request.Id, DateTimeOffset.UtcNow);
     }
 
