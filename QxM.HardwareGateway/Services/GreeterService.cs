@@ -1,6 +1,7 @@
 using Grpc.Core;
 using QxM.HardwareGateway.Application.Simulators;
 using QxM.HardwareGateway.Core;
+using QxM.HardwareGateway.Core.Can;
 using QxM.HardwareGateway.Core.Policy;
 using QxM.HardwareGateway.Core.Requests;
 using QxM.HardwareGateway.Infrastructure.Simulators;
@@ -30,11 +31,10 @@ public class GreeterService : Greeter.GreeterBase
     {
         var envelope = new HardwareGatewayCommandRequestEnvelope(IdempotencyKey.New(), CorrelationId.New(), new Address(1),
             "mabs", new ReadOnlyMemory<byte>([1,2,3,4]), _icb.TimeoutPolicy.CommandTimeout);
-        var response = _icbAdapater.ExecuteCommandAsync(envelope).Result;
-        Console.WriteLine($"{response.CommandId}");
-        Console.WriteLine($"{response.CommandStatus}");
-        Console.WriteLine($"{response.Payload}");
-        Console.WriteLine($"{response.Error}");
+        var canFrameRequest = new CanFrameCommandRequest(IdempotencyKey.New(), CorrelationId.New(), new Address(1),
+            "mabs", new ReadOnlyMemory<byte>([1,2,3,4]), _icb.TimeoutPolicy.CommandTimeout, new StartOfFrame(">"),
+            new EndOfFrame("<"), false, false);
+        var acceptedResponse = _icb.SubmitCommandAsync(canFrameRequest);
         return Task.FromResult(new HelloReply
         {
             Message = $"Hello from {_icbAdapater.HardwareKind}"

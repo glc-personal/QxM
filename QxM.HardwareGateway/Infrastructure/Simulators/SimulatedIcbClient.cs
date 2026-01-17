@@ -312,10 +312,8 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
         }
     }
 
-    private async Task RunCommandAsync(HardwareCommandRequest request, CancellationToken linkedToken)
+    private async Task RunCommandAsync(CanFrameCommandRequest request, CancellationToken linkedToken)
     {
-        request = ((CanFrameCommandRequest)request);
-        
         try
         {
             await Task.Delay(_executeLatency, linkedToken).ConfigureAwait(false);
