@@ -83,7 +83,6 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
         
         // set up the finite state machine
         _fsm = new FiniteStateMachine<ConnectionState, ConnectionTrigger>(initialConnectionState, transitions, onTransition);
-        Console.WriteLine("Simulated ICB client initialized");
     }
     
     public HardwareId HardwareId { get; }
@@ -312,6 +311,11 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
         }
     }
 
+    /// <summary>
+    /// Task for running the <see cref="CanFrameCommandRequest"/> asynchronously with a simulated rate of failure
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="linkedToken"></param>
     private async Task RunCommandAsync(CanFrameCommandRequest request, CancellationToken linkedToken)
     {
         try

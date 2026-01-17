@@ -2,6 +2,7 @@ using Grpc.Core;
 using QxM.HardwareGateway.Application.Simulators;
 using QxM.HardwareGateway.Core;
 using QxM.HardwareGateway.Core.Can;
+using QxM.HardwareGateway.Core.Events;
 using QxM.HardwareGateway.Core.Policy;
 using QxM.HardwareGateway.Core.Requests;
 using QxM.HardwareGateway.Infrastructure.Simulators;
@@ -34,7 +35,27 @@ public class GreeterService : Greeter.GreeterBase
         var canFrameRequest = new CanFrameCommandRequest(IdempotencyKey.New(), CorrelationId.New(), new Address(1),
             "mabs", new ReadOnlyMemory<byte>([1,2,3,4]), _icb.TimeoutPolicy.CommandTimeout, new StartOfFrame(">"),
             new EndOfFrame("<"), false, false);
-        var acceptedResponse = _icb.SubmitCommandAsync(canFrameRequest);
+        var acceptedResponse = _icb.SubmitCommandAsync(canFrameRequest).Result;
+        Console.WriteLine($"Accepted Response: {acceptedResponse.CommandId}");
+        Console.WriteLine($"Accepted Response: {acceptedResponse.AcceptedAtUtc}");
+        var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+        var events = _icb.SubscribeAsync(cts.Token);
+        var bevents = events.ToBlockingEnumerable();
+        foreach (var bevent in bevents)
+        {
+            try
+            {
+                var e = (HardwareCommandLifecycleEvent)bevent;
+                Console.WriteLine($"Event: {e.TimestampUtc}");
+                Console.WriteLine($"Event: {e.Status}");
+                Console.WriteLine($"Event: {e.CommandId}");
+                Console.WriteLine($"Event: {e.Error}");
+            }
+            catch
+            {
+                // ignored
+            }
+        }
         return Task.FromResult(new HelloReply
         {
             Message = $"Hello from {_icbAdapater.HardwareKind}"
