@@ -23,7 +23,7 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
     
     private readonly TimeSpan _connectingLatency = TimeSpan.FromMilliseconds(500);
     private readonly TimeSpan _disconnectingLatency = TimeSpan.FromMilliseconds(300);
-    private readonly TimeSpan _executeLatency = TimeSpan.FromMilliseconds(180);
+    private readonly TimeSpan _executeLatency = TimeSpan.FromMilliseconds(5180);
     private readonly TimeSpan _submitLatency = TimeSpan.FromMilliseconds(30);
     private readonly TimeSpan _heartbeatLatency = TimeSpan.FromMilliseconds(20);
     private readonly TimeSpan _idempotencyExpiration = TimeSpan.FromMilliseconds(500);

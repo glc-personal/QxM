@@ -1,7 +1,6 @@
 using QxM.HardwareGateway.Core;
 using QxM.HardwareGateway.Core.Can;
 using QxM.HardwareGateway.Core.Events;
-using QxM.HardwareGateway.Core.Policy;
 using QxM.HardwareGateway.Core.Requests;
 using QxM.HardwareGateway.Core.Responses;
 using QxM.HardwareGateway.Infrastructure;
@@ -9,7 +8,6 @@ using QxM.HardwareGateway.Infrastructure;
 namespace QxM.HardwareGateway.Application.Simulators;
 
 public sealed class SimulatedIcbAdapter(
-    TimeoutPolicy timeoutPolicy,
     IHardwareClient<CanFrameCommandRequest> hardwareClient)
     : IHardwareAdapter
 {
@@ -20,7 +18,6 @@ public sealed class SimulatedIcbAdapter(
 
     public HardwareId HardwareId { get; } = HardwareId.New;
     public HardwareKind HardwareKind { get; } = HardwareKind.Icb;
-    public TimeoutPolicy TimeoutPolicy { get; } = timeoutPolicy;
 
     public async Task<HardwareGatewayCommandResponseEnvelope> ExecuteCommandAsync(HardwareGatewayCommandRequestEnvelope envelope, CancellationToken cancellationToken = default)
     {

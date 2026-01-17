@@ -10,7 +10,6 @@ public interface IHardwareAdapter
 {
     HardwareId HardwareId { get; }
     HardwareKind HardwareKind { get; }
-    TimeoutPolicy TimeoutPolicy { get; }
     
     Task<HardwareGatewayCommandResponseEnvelope> ExecuteCommandAsync(HardwareGatewayCommandRequestEnvelope envelope, 
         CancellationToken cancellationToken = default);
