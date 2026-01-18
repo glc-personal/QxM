@@ -7,22 +7,29 @@ using QxM.HardwareGateway.Infrastructure;
 
 namespace QxM.HardwareGateway.Application.Simulators;
 
-public sealed class SimulatedIcbAdapter(
-    IHardwareClient<CanFrameCommandRequest> hardwareClient)
-    : IHardwareAdapter
+public sealed class SimulatedIcbAdapter : IHardwareAdapter
 {
     // TODO: Make these StartOfFrame, EndOfFrame, and IsExtended configurable since they are fixed for the board
-    private readonly StartOfFrame _startOfFrame = new(">");
-    private readonly EndOfFrame _endOfFrame = new("</");
-    private readonly bool _isExtended = false;
+    private IHardwareClient<CanFrameCommandRequest> _hardwareClient;
+    private readonly StartOfFrame _startOfFrame;
+    private readonly EndOfFrame _endOfFrame;
+    private readonly bool _isExtended;
 
-    public HardwareId HardwareId { get; } = HardwareId.New;
-    public HardwareKind HardwareKind { get; } = HardwareKind.Icb;
+    public SimulatedIcbAdapter(IHardwareClient<CanFrameCommandRequest> hardwareClient)
+    {
+        _hardwareClient = hardwareClient;
+        _startOfFrame = new StartOfFrame(">");
+        _endOfFrame = new EndOfFrame("</");
+        _isExtended = false;
+    }
+
+    public HardwareId HardwareId => HardwareId.New;
+    public HardwareKind HardwareKind => HardwareKind.Icb;
 
     public async Task<HardwareGatewayCommandResponseEnvelope> ExecuteCommandAsync(HardwareGatewayCommandRequestEnvelope envelope, CancellationToken cancellationToken = default)
     {
         var hardwareCommandRequest = ConvertToHardwareSpecific(envelope);
-        var task = hardwareClient.ExecuteCommandAsync(hardwareCommandRequest, cancellationToken);
+        var task = _hardwareClient.ExecuteCommandAsync(hardwareCommandRequest, cancellationToken);
         var response = await task.ConfigureAwait(false);
         var responseEnvelope =  ConvertToGatewaySpecific(response);
         return responseEnvelope;
@@ -31,15 +38,16 @@ public sealed class SimulatedIcbAdapter(
     public async Task<HardwareGatewayCommandAcceptedEnvelope> SubmitCommandAsync(HardwareGatewayCommandRequestEnvelope envelope, CancellationToken cancellationToken = default)
     {
         var hardwareCommandRequest = ConvertToHardwareSpecific(envelope);
-        var task = hardwareClient.SubmitCommandAsync(hardwareCommandRequest, cancellationToken);
+        var task = _hardwareClient.SubmitCommandAsync(hardwareCommandRequest, cancellationToken);
         var response = await task.ConfigureAwait(false);
         var responseEnvelope =  ConvertToGatewaySpecific(response);
         return responseEnvelope;
     }
 
-    public IAsyncEnumerator<HardwareGatewayEvent> SubscribeAsync(CancellationToken cancellationToken = default)
+    public async IAsyncEnumerator<HardwareGatewayEvent> SubscribeAsync(CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        await foreach (var hardwareEvent in _hardwareClient.SubscribeAsync(cancellationToken).ConfigureAwait(false))
+            yield return ConvertToGatewaySpecific(hardwareEvent);
     }
 
     private CanFrameCommandRequest ConvertToHardwareSpecific(
@@ -52,48 +60,23 @@ public sealed class SimulatedIcbAdapter(
             _endOfFrame, false, _isExtended);
     }
     
-    private HardwareCommandResponse ConvertToHardwareSpecific(
-        HardwareGatewayCommandResponseEnvelope envelope)
-    {
-        return new HardwareCommandResponse(envelope.CommandId, envelope.CommandStatus, envelope.Error, envelope.Payload);
-    }
-    
-    private HardwareCommandAccepted ConvertToHardwareSpecific(
-        HardwareGatewayCommandAcceptedEnvelope envelope)
-    {
-        return new HardwareCommandAccepted(envelope.CommandId, envelope.AcceptedAtUtc);
-    }
-    
-    private HardwareEvent ConvertToHardwareSpecific(
-        HardwareGatewayEvent gatewayEvent)
-    {
-        throw new NotImplementedException();
-    }
-
-    public HardwareGatewayCommandRequestEnvelope ConvertToGatewaySpecific(
-        CanFrameCommandRequest request)
-    {
-        if (!request.Address.HasValue)
-            throw new ArgumentException($"{nameof(SimulatedIcbAdapter)} requires an address value");
-        return new HardwareGatewayCommandRequestEnvelope(request.IdempotencyKey, request.CorrelationId,
-            request.Address.Value, request.Operation, request.Payload, request.Timeout);
-    }
-    
-    public HardwareGatewayCommandResponseEnvelope ConvertToGatewaySpecific(
+    private HardwareGatewayCommandResponseEnvelope ConvertToGatewaySpecific(
         HardwareCommandResponse response)
     {
         return new HardwareGatewayCommandResponseEnvelope(response.CommandId, response.Status, response.Error, response.Payload);
     }
-    
-    public HardwareGatewayCommandAcceptedEnvelope ConvertToGatewaySpecific(
+
+    private HardwareGatewayCommandAcceptedEnvelope ConvertToGatewaySpecific(
         HardwareCommandAccepted response)
     {
         return new HardwareGatewayCommandAcceptedEnvelope(response.CommandId, response.AcceptedAtUtc);
     }
-    
-    public HardwareGatewayEvent ConvertToGatewaySpecific(
+
+    private HardwareGatewayEvent ConvertToGatewaySpecific(
         HardwareEvent hardwareEvent)
     {
-        throw new NotImplementedException();
+        return new HardwareGatewayEvent(hardwareEvent.TimestampUtc, hardwareEvent.HardwareId,
+            hardwareEvent.HardwareKind,
+            hardwareEvent.CorrelationId, hardwareEvent.Address);
     }
 }
