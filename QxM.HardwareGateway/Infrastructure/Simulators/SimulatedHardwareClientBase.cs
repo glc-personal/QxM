@@ -25,11 +25,12 @@ public abstract class SimulatedHardwareClientBase<TRequest> : IHardwareClient<TR
 
     private readonly string _firmwareVersion;
     
-    public SimulatedHardwareClientBase(TimeoutPolicy timeoutPolicy, 
+    public SimulatedHardwareClientBase(HardwareKind kind, TimeoutPolicy timeoutPolicy, 
         SimulatedHardwarePolicy? simulatedHardwarePolicy = null, IdempotencyPolicy? idempotencyPolicy = null)
     {
         TimeoutPolicy = timeoutPolicy;
         HardwareId = HardwareId.New;
+        HardwareKind = kind;
         _simulatedHardwarePolicy = simulatedHardwarePolicy ?? SimulatedHardwarePolicy.Default;
         _idempotencyPolicy = idempotencyPolicy ?? IdempotencyPolicy.Default;
         _firmwareVersion = $"sim-{HardwareKind}-1.0.1.0";
@@ -86,7 +87,7 @@ public abstract class SimulatedHardwareClientBase<TRequest> : IHardwareClient<TR
     }
     
     public HardwareId HardwareId { get; }
-    public HardwareKind HardwareKind => HardwareKind.Pipettor;
+    public HardwareKind HardwareKind { get; }
     public ConnectionState ConnectionState => _fsm.State;
     public TimeoutPolicy TimeoutPolicy { get; }
     
