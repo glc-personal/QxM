@@ -9,7 +9,7 @@ namespace QxM.HardwareGateway.Application.Simulators;
 public class SimulatedHardwareAdapterBase<TRequest>(IHardwareClient<TRequest> hardwareClient) : IHardwareAdapter
     where TRequest : HardwareCommandRequest
 {
-    public HardwareId HardwareId { get; } = HardwareId.New;
+    public HardwareId HardwareId { get; } = hardwareClient.HardwareId;
     public HardwareKind HardwareKind { get; } = hardwareClient.HardwareKind;
 
     public virtual async Task<HardwareGatewayCommandResponseEnvelope> ExecuteCommandAsync(HardwareGatewayCommandRequestEnvelope envelope, CancellationToken cancellationToken = default)
