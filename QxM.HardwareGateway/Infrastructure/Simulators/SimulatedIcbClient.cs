@@ -11,7 +11,7 @@ using QxM.HardwareGateway.Core.Utilities;
 
 namespace QxM.HardwareGateway.Infrastructure.Simulators;
 
-public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>, IAsyncDisposable
+public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
 {
     private readonly FiniteStateMachine<ConnectionState, ConnectionTrigger> _fsm;
     private readonly Channel<HardwareEvent> _eventsChannel;
@@ -72,7 +72,7 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
                 EmitConnectionStateChangedEvent($"{HardwareKind} (Simulated): {ConnectionState.Disconnecting}");
                 // simulate the disconnecting process
                 await Task.Delay(_disconnectingLatency, ct).ConfigureAwait(false);
-                await _fsm.FireAsync(ConnectionTrigger.DisconnectSucceeded, "Disconnected", ct).ConfigureAwait(false);
+                await _fsm!.FireAsync(ConnectionTrigger.DisconnectSucceeded, "Disconnected", ct).ConfigureAwait(false);
             },
             [ConnectionState.Faulted] = (reason, __) =>
             {
@@ -104,7 +104,7 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
         await _fsm.FireAsync(ConnectionTrigger.Connect, "Connect requested", linkedCts.Token);
         
         // wait till connected
-        await _fsm.WaitForStateAsync(cs => cs == ConnectionState.Connected || cs == ConnectionState.Faulted,
+        await _fsm.WaitForStateAsync(cs => cs is ConnectionState.Connected or ConnectionState.Faulted,
             TimeoutPolicy.ConnectTimeout,
             linkedCts.Token).ConfigureAwait(false);
         
@@ -166,7 +166,7 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
                 new HardwareError("FAULTED", $"{HardwareKind} (Simulated): is {ConnectionState.Faulted}"))
         };
         
-        _eventsChannel.Writer.TryWrite(new HardwareHeartbeatEvent(DateTimeOffset.UtcNow,
+        _eventsChannel.Writer.TryWrite(new HardwareHeartbeatEvent(heartbeat.HeartbeatTimeStampUtc,
             HardwareId, HardwareKind, heartbeat));
         return heartbeat;
     }
@@ -348,6 +348,7 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
 
     public async ValueTask DisposeAsync()
     {
+        await DisconnectAsync().ConfigureAwait(false);
         await _fsm.DisposeAsync().ConfigureAwait(false);
         _eventsChannel.Writer.TryComplete();
     }
