@@ -17,13 +17,14 @@ public sealed class SimulatedIcbAdapter : IHardwareAdapter
 
     public SimulatedIcbAdapter(IHardwareClient<CanFrameCommandRequest> hardwareClient)
     {
+        HardwareId = HardwareId.New;
         _hardwareClient = hardwareClient;
         _startOfFrame = new StartOfFrame(">");
         _endOfFrame = new EndOfFrame("</");
         _isExtended = false;
     }
 
-    public HardwareId HardwareId => HardwareId.New;
+    public HardwareId HardwareId { get; } 
     public HardwareKind HardwareKind => HardwareKind.Icb;
 
     public async Task<HardwareGatewayCommandResponseEnvelope> ExecuteCommandAsync(HardwareGatewayCommandRequestEnvelope envelope, CancellationToken cancellationToken = default)

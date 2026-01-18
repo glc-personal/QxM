@@ -7,7 +7,7 @@ using QxM.HardwareGateway.Core.State;
 
 namespace QxM.HardwareGateway.Infrastructure;
 
-public interface IHardwareClient<TRequest> where TRequest : HardwareCommandRequest
+public interface IHardwareClient<TRequest> : IAsyncDisposable where TRequest : HardwareCommandRequest
 {
     HardwareId HardwareId { get; }
     HardwareKind HardwareKind { get; }
