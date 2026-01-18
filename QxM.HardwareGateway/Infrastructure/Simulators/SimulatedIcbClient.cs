@@ -23,7 +23,7 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
     
     private readonly TimeSpan _connectingLatency = TimeSpan.FromMilliseconds(500);
     private readonly TimeSpan _disconnectingLatency = TimeSpan.FromMilliseconds(300);
-    private readonly TimeSpan _executeLatency = TimeSpan.FromMilliseconds(180);
+    private readonly TimeSpan _executeLatency = TimeSpan.FromMilliseconds(5180);
     private readonly TimeSpan _submitLatency = TimeSpan.FromMilliseconds(30);
     private readonly TimeSpan _heartbeatLatency = TimeSpan.FromMilliseconds(20);
     private readonly TimeSpan _idempotencyExpiration = TimeSpan.FromMilliseconds(500);
@@ -83,7 +83,6 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
         
         // set up the finite state machine
         _fsm = new FiniteStateMachine<ConnectionState, ConnectionTrigger>(initialConnectionState, transitions, onTransition);
-        Console.WriteLine("Simulated ICB client initialized");
     }
     
     public HardwareId HardwareId { get; }
@@ -136,7 +135,7 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
     }
 
     /// <summary>
-    /// Get the hearbeat of the client
+    /// Get the heartbeat of the client
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
@@ -238,15 +237,12 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
         EnsureConnected();
         CleanupIdempotency();
         
-        using var cts = new CancellationTokenSource(TimeoutPolicy.CommandTimeout);
-        using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cts.Token);
-
         if (_idempotency.TryGetValue(request.IdempotencyKey, out var idempotencyKey)
             && idempotencyKey.ExpiresAt > DateTimeOffset.UtcNow)
         {
             await EmitCommandLifecycleEvent($"Command {request.Id} submitted", request.CorrelationId, 
                 request.Address, request.Id, request.IdempotencyKey, request.Operation, CommandStatus.Accepted, 
-                null, linkedCts.Token)
+                null, cancellationToken)
                 .ConfigureAwait(false);
             return new HardwareCommandAccepted(request.Id, DateTimeOffset.UtcNow);
         }
@@ -254,12 +250,12 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
         var commandId = request.Id;
         _idempotency[request.IdempotencyKey] = (commandId, DateTimeOffset.UtcNow.Add(_idempotencyExpiration));
         _completed.TryAdd(commandId, new TaskCompletionSource<HardwareCommandResponse>(TaskCreationOptions.RunContinuationsAsynchronously));
-        await Task.Delay(_submitLatency, linkedCts.Token).ConfigureAwait(false);
+        await Task.Delay(_submitLatency, cancellationToken).ConfigureAwait(false);
         await EmitCommandLifecycleEvent($"Command {request.Id} submitted", request.CorrelationId, 
                 request.Address, request.Id, request.IdempotencyKey, request.Operation, CommandStatus.Accepted, 
-                null, linkedCts.Token)
+                null, cancellationToken)
             .ConfigureAwait(false);
-        _ = RunCommandAsync(request, linkedCts.Token);
+        _ = RunCommandAsync(request, cancellationToken);
         return new HardwareCommandAccepted(request.Id, DateTimeOffset.UtcNow);
     }
 
@@ -315,10 +311,13 @@ public sealed class SimulatedIcbClient : IHardwareClient<CanFrameCommandRequest>
         }
     }
 
-    private async Task RunCommandAsync(HardwareCommandRequest request, CancellationToken linkedToken)
+    /// <summary>
+    /// Task for running the <see cref="CanFrameCommandRequest"/> asynchronously with a simulated rate of failure
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="linkedToken"></param>
+    private async Task RunCommandAsync(CanFrameCommandRequest request, CancellationToken linkedToken)
     {
-        request = ((CanFrameCommandRequest)request);
-        
         try
         {
             await Task.Delay(_executeLatency, linkedToken).ConfigureAwait(false);

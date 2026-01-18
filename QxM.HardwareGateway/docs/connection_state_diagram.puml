@@ -1,0 +1,27 @@
+@startuml
+state unknown0 <<start>>
+state unknown1 <<end>>
+state Disconnected
+state Connecting
+state Connected
+state Disconnecting
+state Faulted
+
+unknown0 --> Disconnected : start-up
+unknown1 <-- Disconnected : done
+
+Disconnected --> Connecting : Connect
+Disconnected --> Faulted : Fault
+
+Connecting --> Connected : ConnectSucceeded
+Connecting --> Faulted : ConnectFailed
+
+Connected --> Faulted : Fault
+Connected --> Disconnecting : Disconnect
+
+Disconnecting --> Disconnected : DisconnectSucceeded
+Disconnecting --> Faulted : DisconnectFailed
+
+Faulted --> Disconnecting : ResetFault
+
+@enduml

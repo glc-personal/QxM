@@ -1,5 +1,6 @@
 using QxM.HardwareGateway.Core;
 using QxM.HardwareGateway.Core.Events;
+using QxM.HardwareGateway.Core.Policy;
 using QxM.HardwareGateway.Core.Requests;
 using QxM.HardwareGateway.Core.Responses;
 

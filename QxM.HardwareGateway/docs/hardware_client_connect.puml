@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+:HardwareClient.ConnectAsync(cancellationToken);
+
+start
+
+:Create connection timeout cancellation source;
+:Link timeout and general cancellation tokens;
+:Attempt to connect to hardware or simulate;
+:FiniteStateMachine.FireAsync(ConnectionTrigger.Connect);
+:FiniteStateMachine.WaitAsync(Connected || Faulted);
+
+stop
+
+@enduml
