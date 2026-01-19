@@ -31,4 +31,9 @@ public sealed class PipettorAdapter : IHardwareAdapter
     {
         throw new NotImplementedException();
     }
+
+    public async ValueTask DisposeAsync()
+    {
+        // TODO release managed resources here
+    }
 }

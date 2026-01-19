@@ -6,7 +6,7 @@ using QxM.HardwareGateway.Core.Responses;
 
 namespace QxM.HardwareGateway.Application;
 
-public interface IHardwareAdapter
+public interface IHardwareAdapter : IAsyncDisposable
 {
     HardwareId HardwareId { get; }
     HardwareKind HardwareKind { get; }

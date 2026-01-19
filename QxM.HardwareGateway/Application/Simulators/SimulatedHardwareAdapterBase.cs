@@ -61,4 +61,9 @@ public class SimulatedHardwareAdapterBase<TRequest>(IHardwareClient<TRequest> ha
             hardwareEvent.HardwareKind,
             hardwareEvent.CorrelationId, hardwareEvent.Address);
     }
+
+    public async ValueTask DisposeAsync()
+    {
+        await hardwareClient.DisposeAsync();
+    }
 }

@@ -25,4 +25,9 @@ public sealed class CameraAdapter(IHardwareClient<ApiCommandRequest> HardwareCli
     {
         throw new NotImplementedException();
     }
+
+    public async ValueTask DisposeAsync()
+    {
+        await HardwareClient.DisposeAsync();
+    }
 }
