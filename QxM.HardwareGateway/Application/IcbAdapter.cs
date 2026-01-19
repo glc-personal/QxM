@@ -29,7 +29,7 @@ public sealed class IcbAdapter : IHardwareAdapter
         throw new NotImplementedException();
     }
 
-    public IAsyncEnumerator<HardwareGatewayEvent> SubscribeAsync(CancellationToken cancellationToken = default)
+    public IAsyncEnumerator<HardwareGatewayEventEnvelope> SubscribeAsync(CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

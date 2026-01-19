@@ -21,7 +21,7 @@ public sealed class CameraAdapter(IHardwareClient<ApiCommandRequest> HardwareCli
         throw new NotImplementedException();
     }
 
-    public IAsyncEnumerator<HardwareGatewayEvent> SubscribeAsync(CancellationToken cancellationToken = default)
+    public IAsyncEnumerator<HardwareGatewayEventEnvelope> SubscribeAsync(CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

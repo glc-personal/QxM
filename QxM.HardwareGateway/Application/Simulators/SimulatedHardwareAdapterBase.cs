@@ -30,7 +30,7 @@ public class SimulatedHardwareAdapterBase<TRequest>(IHardwareClient<TRequest> ha
         return responseEnvelope;
     }
 
-    public virtual async IAsyncEnumerator<HardwareGatewayEvent> SubscribeAsync(CancellationToken cancellationToken = default)
+    public virtual async IAsyncEnumerator<HardwareGatewayEventEnvelope> SubscribeAsync(CancellationToken cancellationToken = default)
     {
         await foreach (var hardwareEvent in hardwareClient.SubscribeAsync(cancellationToken).ConfigureAwait(false))
             yield return ConvertToGatewaySpecific(hardwareEvent);
@@ -54,10 +54,10 @@ public class SimulatedHardwareAdapterBase<TRequest>(IHardwareClient<TRequest> ha
         return new HardwareGatewayCommandAcceptedEnvelope(response.CommandId, response.AcceptedAtUtc);
     }
 
-    private HardwareGatewayEvent ConvertToGatewaySpecific(
+    private HardwareGatewayEventEnvelope ConvertToGatewaySpecific(
         HardwareEvent hardwareEvent)
     {
-        return new HardwareGatewayEvent(hardwareEvent.TimestampUtc, hardwareEvent.HardwareId,
+        return new HardwareGatewayEventEnvelope(hardwareEvent.TimestampUtc, hardwareEvent.HardwareId,
             hardwareEvent.HardwareKind,
             hardwareEvent.CorrelationId, hardwareEvent.Address);
     }

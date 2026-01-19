@@ -17,5 +17,5 @@ public interface IHardwareAdapter : IAsyncDisposable
     Task<HardwareGatewayCommandAcceptedEnvelope> SubmitCommandAsync(HardwareGatewayCommandRequestEnvelope envelope,
         CancellationToken cancellationToken = default);
     
-    IAsyncEnumerator<HardwareGatewayEvent> SubscribeAsync(CancellationToken cancellationToken = default);
+    IAsyncEnumerator<HardwareGatewayEventEnvelope> SubscribeAsync(CancellationToken cancellationToken = default);
 }
