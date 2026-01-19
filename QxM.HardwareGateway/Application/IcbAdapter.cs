@@ -33,4 +33,9 @@ public sealed class IcbAdapter : IHardwareAdapter
     {
         throw new NotImplementedException();
     }
+
+    public async ValueTask DisposeAsync()
+    {
+        // TODO release managed resources here
+    }
 }

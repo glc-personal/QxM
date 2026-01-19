@@ -1,4 +1,5 @@
 using Grpc.Core;
+using QxM.HardwareGateway.Application;
 using QxM.HardwareGateway.Application.Simulators;
 using QxM.HardwareGateway.Core;
 using QxM.HardwareGateway.Core.Can;
@@ -13,52 +14,65 @@ public class GreeterService : Greeter.GreeterBase
 {
     private readonly ILogger<GreeterService> _logger;
     private SimulatedIcbClient _icb;
+    private SimulatedPipettorClient _pipettor;
     private SimulatedIcbAdapter _icbAdapater;
+    private SimulatedPipettorAdapter _pipettorAdapter;
+    private HardwareGatewayRouter _router;
 
     public GreeterService(ILogger<GreeterService> logger)
     {
         _logger = logger;
+        
         var tp = new TimeoutPolicy(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10), 
             TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10));
-        _icb = new SimulatedIcbClient(tp);
-        _icbAdapater = new SimulatedIcbAdapter(_icb);
         
-        Console.WriteLine($"{_icb.HardwareKind} Connection State: {_icb.ConnectionState}");
-        _icb.ConnectAsync().Wait();
-        Console.WriteLine($"{_icb.HardwareKind} Connection State: {_icb.ConnectionState}");
+        _icb = new SimulatedIcbClient(tp);
+        _pipettor = new SimulatedPipettorClient(tp);
+
+        _icb.ConnectAsync().GetAwaiter().GetResult();
+        _pipettor.ConnectAsync().GetAwaiter().GetResult();
+        
+        _icbAdapater = new SimulatedIcbAdapter(_icb);
+        _pipettorAdapter = new SimulatedPipettorAdapter(_pipettor);
+
+        _router = new HardwareGatewayRouter(new List<IHardwareAdapter>
+        {
+            _icbAdapater,
+            _pipettorAdapter,
+        });
     }
 
     public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
     {
-        var envelope = new HardwareGatewayCommandRequestEnvelope(IdempotencyKey.New(), CorrelationId.New(), new Address(1),
-            "mabs", new ReadOnlyMemory<byte>([1,2,3,4]), _icb.TimeoutPolicy.CommandTimeout);
-        var canFrameRequest = new CanFrameCommandRequest(IdempotencyKey.New(), CorrelationId.New(), new Address(1),
-            "mabs", new ReadOnlyMemory<byte>([1,2,3,4]), _icb.TimeoutPolicy.CommandTimeout, new StartOfFrame(">"),
-            new EndOfFrame("<"), false, false);
-        var acceptedResponse = _icb.SubmitCommandAsync(canFrameRequest).Result;
-        Console.WriteLine($"Accepted Response: {acceptedResponse.CommandId}");
-        Console.WriteLine($"Accepted Response: {acceptedResponse.AcceptedAtUtc}");
-        var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
-        var events = _icb.SubscribeAsync(cts.Token);
-        var bevents = events.ToBlockingEnumerable();
-        foreach (var bevent in bevents)
-        {
-            try
-            {
-                var e = (HardwareCommandLifecycleEvent)bevent;
-                Console.WriteLine($"Event: {e.TimestampUtc}");
-                Console.WriteLine($"Event: {e.Status}");
-                Console.WriteLine($"Event: {e.CommandId}");
-                Console.WriteLine($"Event: {e.Error}");
-            }
-            catch
-            {
-                // ignored
-            }
-        }
+        var scheme = new HardwareGatewayRoutingScheme(_icb.HardwareId, _icb.HardwareKind);
+        var envelopeRequest = new HardwareGatewayCommandRequestEnvelope(IdempotencyKey.New(), CorrelationId.New(),
+            new Address(1), "mabs", new ReadOnlyMemory<byte>([1, 2, 3, 4]),
+            new TimeSpan(0, 0, 0, 5));
+        var responseEnvelope = _router.RouteExecuteCommandAsync(scheme, 
+            envelopeRequest).Result;
+        
+        Console.WriteLine(scheme.HardwareKind);
+        Console.WriteLine($"Response Command Id: {responseEnvelope.CommandId}");
+        Console.WriteLine($"Response Command Status: {responseEnvelope.CommandStatus}");
+        Console.WriteLine($"Response Command Error: {responseEnvelope.Error}");
+        Console.WriteLine($"Response Command Payload: {responseEnvelope.Payload}");
+        
+        scheme = new HardwareGatewayRoutingScheme(_pipettor.HardwareId, _pipettor.HardwareKind);
+        envelopeRequest = new HardwareGatewayCommandRequestEnvelope(IdempotencyKey.New(), CorrelationId.New(),
+            null, "aspirate", new ReadOnlyMemory<byte>([100,100,100,100,100,100,100,100]),
+            new TimeSpan(0, 0, 0, 20));
+        responseEnvelope = _router.RouteExecuteCommandAsync(scheme, 
+            envelopeRequest).Result;
+        
+        Console.WriteLine(scheme.HardwareKind);
+        Console.WriteLine($"Response Command Id: {responseEnvelope.CommandId}");
+        Console.WriteLine($"Response Command Status: {responseEnvelope.CommandStatus}");
+        Console.WriteLine($"Response Command Error: {responseEnvelope.Error}");
+        Console.WriteLine($"Response Command Payload: {responseEnvelope.Payload}");
+        
         return Task.FromResult(new HelloReply
         {
-            Message = $"Hello from {_icbAdapater.HardwareKind}"
+            Message = $"Hello"
         });
     }
 }
