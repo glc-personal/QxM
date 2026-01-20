@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QxM.HardwareGateway", "QxM.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QxM.Core", "QxM.Core\QxM.Core.csproj", "{A62A9503-7C3D-4A96-AC15-E2331751908E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QxM.Infrastructure", "QxM.Infrastructure\QxM.Infrastructure.csproj", "{7F3C3AFB-30E9-46EA-993A-65A64509673A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +20,10 @@ Global
 		{A62A9503-7C3D-4A96-AC15-E2331751908E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A62A9503-7C3D-4A96-AC15-E2331751908E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A62A9503-7C3D-4A96-AC15-E2331751908E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F3C3AFB-30E9-46EA-993A-65A64509673A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F3C3AFB-30E9-46EA-993A-65A64509673A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F3C3AFB-30E9-46EA-993A-65A64509673A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F3C3AFB-30E9-46EA-993A-65A64509673A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection

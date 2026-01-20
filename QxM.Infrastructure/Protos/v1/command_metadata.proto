@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package qxm.infrastructure.v1;
+
+option csharp_namespace = "QxM.Infrastructure.Protos.v1";
+
+message CommandMetadata {
+  // End-to-end trace identifier
+  string correlation_id = 1;
+  
+  // Used for deduplication on retries
+  string idempotency_key = 2;
+  
+  // Caller identity
+  string caller = 3;
+}
