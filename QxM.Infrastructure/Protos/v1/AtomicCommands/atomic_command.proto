@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package qxm.infrastructure.v1;
+
+option csharp_namespace = "QxM.Infrastructure.Protos.v1.AtomicCommands";
+
+import "v1/AtomicCommands/home_command.proto";
+import "v1/AtomicCommands/move_absolute_command.proto";
+import "v1/AtomicCommands/move_relative_command.proto";
+
+message AtomicCommand {
+  // Version of the atomic command schema
+  uint32 schema_version = 1;
+  
+  // Command payload
+  oneof payload {
+    HomeCommand home = 10;
+    MoveAbsoluteCommand move_abs = 11;
+    MoveRelativeCommand move_rel = 12;
+  }
+}

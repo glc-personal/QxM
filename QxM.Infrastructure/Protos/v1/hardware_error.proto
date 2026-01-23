@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package qxm.infrastructure.v1;
+
+option csharp_namespace = "QxM.Infrastructure.Protos.v1";
+
+message HardwareError {
+  string code = 1;
+  string message = 2;
+}

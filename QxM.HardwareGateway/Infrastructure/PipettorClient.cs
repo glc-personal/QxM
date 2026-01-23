@@ -7,12 +7,13 @@ using QxM.HardwareGateway.Core.State;
 
 namespace QxM.HardwareGateway.Infrastructure;
 
-public sealed class PipettorClient : IHardwareClient<ApiCommandRequest>
+public sealed class PipettorClient(TimeoutPolicy timeoutPolicy) : IHardwareClient<ApiCommandRequest>
 {
-    public HardwareId HardwareId { get; }
-    public HardwareKind HardwareKind { get; }
-    public ConnectionState ConnectionState { get; }
-    public TimeoutPolicy TimeoutPolicy { get; }
+    public HardwareId HardwareId => HardwareId.New;
+    public HardwareKind HardwareKind => HardwareKind.Pipettor;
+    public ConnectionState ConnectionState { get; } = ConnectionState.Disconnected;
+    public TimeoutPolicy TimeoutPolicy { get; } = timeoutPolicy;
+
     public Task ConnectAsync(CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();

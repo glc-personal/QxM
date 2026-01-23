@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package qxm.infrastructure.v1;
+
+option csharp_namespace = "QxM.Infrastructure.Protos.v1.AtomicCommands";
+
+message HomeCommand {
+  // Empty is a broadcast
+  string address = 1;
+}
