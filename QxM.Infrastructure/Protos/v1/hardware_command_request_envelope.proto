@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package qxm.infrastructure.v1;
+
+option csharp_namespace = "QxM.Infrastructure.Protos.v1";
+
+import "v1/command_metadata.proto";
+import "v1/AtomicCommands/atomic_command.proto";
+
+message HardwareCommandRequestEnvelope {
+  // Command metadata 
+  CommandMetadata metadata = 1;
+  
+  // Target uri for where the command should go
+  string target_uri = 2;
+  
+  // Fundamental hardware command
+  AtomicCommand atomic_command = 3;
+}

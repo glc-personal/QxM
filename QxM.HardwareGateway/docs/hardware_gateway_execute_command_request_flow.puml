@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+"External Service/Client" -> HardwareGatewayService : External gRPC contract
+activate HardwareGatewayService
+
+HardwareGatewayService -> HardwareGatewayRouter : HardwareGatewayRequestEnvelope
+
+HardwareGatewayRouter --> HardwareAdapter : RouteExecuteCommandAsync()
+
+HardwareAdapter -> HardwareAdapter : ConvertToHardwareSpecific
+HardwareAdapter -> HardwareClient : HardwareCommandRequest
+activate HardwareClient
+HardwareClient --> HardwareClient : ExecuteCommandAsync
+HardwareClient --> HardwareClient : SubmitCommandAsync
+HardwareClient --> HardwareClient : RunCommandAsync
+HardwareClient --> HardwareClient : Wait for terminal CommandStatus
+HardwareClient -> HardwareAdapter : HardwareCommandResponse
+deactivate HardwareClient
+
+HardwareAdapter -> HardwareGatewayRouter : HardwareGatewayResponseEnvelope 
+
+HardwareGatewayRouter -> HardwareGatewayService : HardwareGatewayResponseEnvelope
+
+HardwareGatewayService --> "External Service/Client" : External gRPC contract
+deactivate HardwareGatewayService
+
+
+@enduml

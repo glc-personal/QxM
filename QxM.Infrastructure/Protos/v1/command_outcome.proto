@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package qxm.infrastructure.v1;
+
+option csharp_namespace = "QxM.Infrastructure.Protos.v1";
+
+enum CommandOutcome {
+  COMMAND_OUTCOME_UNSPECIFIED = 0;
+  COMMAND_OUTCOME_SUCCEEDED = 1;
+  COMMAND_OUTCOME_FAILED = 2;
+  COMMAND_OUTCOME_TIMED_OUT = 3;
+  COMMAND_OUTCOME_CANCELLED = 4;
+  COMMAND_OUTCOME_REJECTED = 5;
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package qxm.infrastructure.v1;
+
+option csharp_namespace = "QxM.Infrastructure.Protos.v1.AtomicCommands";
+
+message MoveRelativeCommand {
+  // Address of motor to be moved
+  string address = 1;
+  
+  // Delta to move
+  double delta = 2;
+  
+  // Speed to move at
+  double speed = 3;
+}

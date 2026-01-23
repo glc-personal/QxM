@@ -9,8 +9,14 @@ namespace QxM.HardwareGateway.Infrastructure;
 
 public sealed class CameraClient : IHardwareClient<ApiCommandRequest>
 {
-    public HardwareId HardwareId { get; }
-    public HardwareKind HardwareKind { get; }
+    public CameraClient(TimeoutPolicy timeoutPolicy)
+    {
+        TimeoutPolicy = timeoutPolicy;
+        ConnectionState = ConnectionState.Disconnected;
+    }
+
+    public HardwareId HardwareId => HardwareId.New;
+    public HardwareKind HardwareKind => HardwareKind.Camera;
     public ConnectionState ConnectionState { get; }
     public TimeoutPolicy TimeoutPolicy { get; }
     public Task ConnectAsync(CancellationToken cancellationToken = default)
