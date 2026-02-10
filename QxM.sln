@@ -6,6 +6,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QxM.Core", "QxM.Core\QxM.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QxM.Infrastructure", "QxM.Infrastructure\QxM.Infrastructure.csproj", "{7F3C3AFB-30E9-46EA-993A-65A64509673A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QxM.Application", "QxM.Application", "{A9036C31-D3DB-47B1-AE72-9ADF53D1BAB9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QxM.Domain", "QxM.Domain", "{AB277143-C113-43BA-8623-5BF793A43DEA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QxM.Core", "QxM.Core", "{7AD5B65A-AC51-488A-938C-771B4C949F8B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QxM.Infrastructure", "QxM.Infrastructure", "{6087421A-7FD2-487D-85AF-259D2DF218B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QxM.Application.HardwareGateway", "QxM.Application.HardwareGateway\QxM.Application.HardwareGateway.csproj", "{08C1F6F9-E58F-402D-9ED0-F0476E990FE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QxM.Infrastructure.Interfaces", "QxM.Infrastructure.Interfaces\QxM.Infrastructure.Interfaces.csproj", "{D0883636-5785-4394-A16A-474B4D258A8C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,7 +36,19 @@ Global
 		{7F3C3AFB-30E9-46EA-993A-65A64509673A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F3C3AFB-30E9-46EA-993A-65A64509673A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F3C3AFB-30E9-46EA-993A-65A64509673A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08C1F6F9-E58F-402D-9ED0-F0476E990FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08C1F6F9-E58F-402D-9ED0-F0476E990FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08C1F6F9-E58F-402D-9ED0-F0476E990FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08C1F6F9-E58F-402D-9ED0-F0476E990FE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0883636-5785-4394-A16A-474B4D258A8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0883636-5785-4394-A16A-474B4D258A8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0883636-5785-4394-A16A-474B4D258A8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0883636-5785-4394-A16A-474B4D258A8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{A62A9503-7C3D-4A96-AC15-E2331751908E} = {7AD5B65A-AC51-488A-938C-771B4C949F8B}
+		{7F3C3AFB-30E9-46EA-993A-65A64509673A} = {6087421A-7FD2-487D-85AF-259D2DF218B5}
+		{08C1F6F9-E58F-402D-9ED0-F0476E990FE0} = {A9036C31-D3DB-47B1-AE72-9ADF53D1BAB9}
+		{D0883636-5785-4394-A16A-474B4D258A8C} = {6087421A-7FD2-487D-85AF-259D2DF218B5}
 	EndGlobalSection
 EndGlobal
